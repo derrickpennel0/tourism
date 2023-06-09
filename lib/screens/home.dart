@@ -10,8 +10,12 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.transparent, actions: [
-        IconButton(onPressed: () => {}, icon: const Icon(Icons.search_outlined))
+      appBar:
+          AppBar(backgroundColor: Colors.transparent, elevation: 0, actions: [
+        IconTheme(
+            data: IconThemeData(color: Theme.of(context).iconTheme.color),
+            child: IconButton(
+                onPressed: () => {}, icon: Icon(Icons.verified_user_rounded)))
       ]),
       drawer: Drawer(
         child: Column(
@@ -47,59 +51,62 @@ class Home extends StatelessWidget {
         ),
       ),
       body: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 20),
         children: [
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-            child: Row(
-              children: [1, 2, 3, 4, 5, 7]
-                  .map(
-                    (i) => Container(
-                        margin: const EdgeInsets.only(right: 7),
-                        height: 40,
-                        width: 150,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(24)),
-                            border: Border.all(
-                                color: Color.fromARGB(255, 97, 97, 97),
-                                width: 1.5),
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: Colors.black54,
-                                  offset: Offset(1, 2),
-                                  blurRadius: 12)
-                            ]),
-                        child: const ListTile(
-                          trailing: Icon(Icons.beach_access_outlined),
-                          title: Text(
-                            "Beach",
-                            style: TextStyle(fontWeight: FontWeight.w400),
-                          ),
-                        )),
-                  )
-                  .toList(),
-            ),
-          ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            margin: const EdgeInsets.only(top: 20, bottom: 20),
-            height: 40,
+            // padding: const EdgeInsets.symmetric(horizontal: 8),
+            margin: const EdgeInsets.only(top: 20, bottom: 5),
+            height: 50,
+            width: double.infinity,
+            alignment: Alignment.center,
+            // decoration: BoxDecoration(
+            //     image: DecorationImage(
+            //         fit: BoxFit.cover,
+            //         image: AssetImage("assets/images/background.jpg"))),
             child: TextFormField(
               decoration: const InputDecoration(
-                  // labelText: 'Search location here ....',
-                  // floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  // contentPadding: EdgeInsets.only(left: 20),
-                  hintText: "Search location here ....",
-                  prefixIcon: Icon(Icons.location_city),
-                  hintMaxLines: 30),
+                fillColor: Color.fromARGB(179, 188, 22, 22),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(),
+                    borderRadius: BorderRadius.all(Radius.circular(30))),
+                focusedBorder: OutlineInputBorder(
+                    // borderSide: BorderSide(),
+                    borderRadius: BorderRadius.all(Radius.circular(30))),
+                // labelText: 'Search location here ....',
+                // floatingLabelBehavior: FloatingLabelBehavior.auto,
+                // contentPadding: EdgeInsets.only(left: 20),
+                hintText: "Search location here ....",
+                prefixIcon: Icon(Icons.search),
+              ),
             ),
           ),
+          Categories(),
+          SizedBox(
+            height: 40,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Recent Search',
+                style: GoogleFonts.quicksand(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: const Color.fromARGB(149, 255, 255, 255)),
+              ),
+              Text(
+                'Clear History',
+                style: GoogleFonts.quicksand(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: Color.fromARGB(214, 241, 176, 176)),
+              ),
+            ],
+          ),
+
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: Row(
               children: [
                 Container(
@@ -217,6 +224,48 @@ class Home extends StatelessWidget {
           )
           // const Image(image: AssetImage('assets/images/test.png'))
         ],
+      ),
+    );
+  }
+}
+
+class Categories extends StatelessWidget {
+  const Categories({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      child: Row(
+        children: [
+          "Most Popular",
+          "Recommended",
+          "Trending",
+          "Historic",
+          "Nature",
+          "Traditional"
+        ]
+            .map(
+              (i) => Container(
+                  margin: const EdgeInsets.only(right: 4),
+                  height: 40,
+                  width: 150,
+                  alignment: Alignment.center,
+                  child: ListTile(
+                    // trailing: Icon(Icons.beach_access_outlined),
+                    title: Text(
+                      i.toString(),
+                      style: GoogleFonts.quicksand(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: const Color.fromARGB(149, 255, 255, 255)),
+                    ),
+                  )),
+            )
+            .toList(),
       ),
     );
   }

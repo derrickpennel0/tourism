@@ -11,7 +11,7 @@ class _CarouselState extends State<Carousel> {
     "assets/images/interior.jpeg",
     "assets/images/desert.jpg",
     "assets/images/background.jpg",
-    "assets/images/travel.jpeg",
+    "assets/images/travel.png",
   ];
   int currentIndex = 0;
   late Timer timer;

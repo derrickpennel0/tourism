@@ -1,4 +1,5 @@
-import 'package:first/home.dart';
+import 'package:first/screens/first_timers_page.dart';
+import 'package:first/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -61,8 +62,9 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                   alignment: const Alignment(-1, 0),
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
-                    "Discover \ngreat places",
-                    style: GoogleFonts.abel(fontSize: 40),
+                    "Discover the Wonders of Ghana:\n Your Ultimate Travel Companion",
+                    style: GoogleFonts.quicksand(
+                        fontSize: 40, fontWeight: FontWeight.w800),
                   ),
                 ),
                 const SizedBox(
@@ -138,7 +140,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const Home(),
+                          builder: (context) => const FirstTimersPage(),
                         ),
                       );
                     },

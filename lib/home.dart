@@ -1,6 +1,8 @@
 import 'package:first/components/Carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'components/myDrawerListTile.dart';
+import 'login.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -23,10 +25,24 @@ class Home extends StatelessWidget {
                 ),
               ),
             ),
-            const ListTile(
-              leading: Icon(Icons.home),
-              title: const Text("Home"),
-            )
+            MyDrawerListTile(
+              title: "Home",
+              leadingIcon: Icons.home,
+              onTap: () {},
+            ),
+            MyDrawerListTile(
+              title: "Sign In",
+              leadingIcon: Icons.exit_to_app_outlined,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                );
+              },
+            ),
+            MyDrawerListTile(title: "Tour", onTap: () {}),
+            MyDrawerListTile(title: "Go", onTap: () {}),
+            MyDrawerListTile(title: "Next", onTap: () {}),
           ],
         ),
       ),

@@ -74,7 +74,7 @@ class _FirstTimersPageState extends State<FirstTimersPage> {
             ),
           ),
         ),
-        Overlay(),
+       const Overlay(),
       ])),
     );
   }
@@ -98,7 +98,7 @@ class _OverlayState extends State<Overlay> with SingleTickerProviderStateMixin {
     super.initState();
 
     _controller = AnimationController(
-      duration: Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 2000),
       vsync: this,
     )..repeat(reverse: true);
     _animation = Tween<double>(begin: 1.0, end: 1.5).animate(_controller);

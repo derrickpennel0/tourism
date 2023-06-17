@@ -1,12 +1,18 @@
 import 'package:first/components/Carousel.dart';
+// import 'package:first/components/DropdownDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'components/myDrawerListTile.dart';
+import '../components/myDrawerListTile.dart';
 import 'login.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +21,8 @@ class Home extends StatelessWidget {
         IconTheme(
             data: IconThemeData(color: Theme.of(context).iconTheme.color),
             child: IconButton(
-                onPressed: () => {}, icon: Icon(Icons.verified_user_rounded)))
+                onPressed: () => {},
+                icon: const Icon(Icons.verified_user_rounded)))
       ]),
       drawer: Drawer(
         child: Column(
@@ -51,7 +58,7 @@ class Home extends StatelessWidget {
         ),
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
           Container(
             // padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -64,7 +71,7 @@ class Home extends StatelessWidget {
             //         fit: BoxFit.cover,
             //         image: AssetImage("assets/images/background.jpg"))),
             child: TextFormField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 fillColor: Color.fromARGB(179, 188, 22, 22),
                 enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(),
@@ -75,13 +82,20 @@ class Home extends StatelessWidget {
                 // labelText: 'Search location here ....',
                 // floatingLabelBehavior: FloatingLabelBehavior.auto,
                 // contentPadding: EdgeInsets.only(left: 20),
-                hintText: "Search location here ....",
+                hintText: "Search location here....",
+                // hintText: "Hey",
+                hintStyle: TextStyle(color: Colors.white),
                 prefixIcon: Icon(Icons.search),
+
+                // suffixIcon: Dialog(
+                //     shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(10.0),
+                // )),
               ),
             ),
           ),
-          Categories(),
-          SizedBox(
+          const Categories(),
+          const SizedBox(
             height: 40,
           ),
           Row(
@@ -99,7 +113,7 @@ class Home extends StatelessWidget {
                 style: GoogleFonts.quicksand(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
-                    color: Color.fromARGB(214, 241, 176, 176)),
+                    color: const Color.fromARGB(214, 241, 176, 176)),
               ),
             ],
           ),
@@ -126,7 +140,7 @@ class Home extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(right: 10),
+                  margin: const EdgeInsets.only(right: 10),
                   height: 220,
                   width: 160,
                   padding:
@@ -142,7 +156,7 @@ class Home extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(right: 10),
+                  margin: const EdgeInsets.only(right: 10),
                   height: 220,
                   width: 160,
                   padding:
@@ -193,7 +207,7 @@ class Home extends StatelessWidget {
                                 fontSize: 15,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 15,
                             ),
                             ElevatedButton(
@@ -204,10 +218,11 @@ class Home extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
                                   ),
-                                  minimumSize:
-                                      MaterialStatePropertyAll(Size(100, 45)),
+                                  minimumSize: const MaterialStatePropertyAll(
+                                      Size(100, 45)),
                                   backgroundColor:
-                                      MaterialStatePropertyAll(Colors.white)),
+                                      const MaterialStatePropertyAll(
+                                          Colors.white)),
                               child: const Text(
                                 "See List",
                                 style: TextStyle(

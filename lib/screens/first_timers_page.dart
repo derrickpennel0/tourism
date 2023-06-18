@@ -48,6 +48,57 @@ class _FirstTimersPageState extends State<FirstTimersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          leading: Container(
+              padding: EdgeInsets.all(12),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(7),
+                    color: Colors.white.withOpacity(0.8),
+                  ),
+                  child: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.redAccent,
+                    size: 20,
+                  ),
+                ),
+              )),
+          title: Text(
+            "Details",
+            style: GoogleFonts.quicksand(
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+                color: const Color.fromARGB(149, 255, 255, 255)),
+          ),
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          actions: [
+            Container(
+                width: 57,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(7),
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                    child: const Icon(
+                      Icons.bookmark_outline,
+                      color: Colors.redAccent,
+                      size: 20,
+                    ),
+                  ),
+                )),
+          ]),
       body: SafeArea(
           child: Stack(children: [
         PageView.builder(

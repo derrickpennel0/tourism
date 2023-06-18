@@ -22,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         appBar: AppBar(
           //  toolbarOpacity :0.1,
+          elevation: 0,
           centerTitle: true,
           backgroundColor: Colors.transparent,
           title: const Text("Login"),

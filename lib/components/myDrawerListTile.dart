@@ -15,7 +15,10 @@ class MyDrawerListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(leadingIcon),
+      leading: IconTheme(
+        data: IconThemeData(color: Theme.of(context).iconTheme.color),
+        child: Icon(leadingIcon),
+      ),
       title: Text(title),
       onTap: onTap,
       hoverColor: Colors.cyan,

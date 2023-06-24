@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first/screens/details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -8,6 +9,13 @@ import 'dart:convert';
 
 import '../main.dart';
 
+class Suggestion {
+  final String name;
+  final String photoUrl;
+
+  Suggestion({required this.name, required this.photoUrl});
+}
+
 class MySearchScreen extends StatefulWidget {
   @override
   _MySearchScreenState createState() => _MySearchScreenState();
@@ -17,16 +25,37 @@ class _MySearchScreenState extends State<MySearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   // List<String> _suggestions = [];
 
-  Future<List<String>> fetchSuggestions(String query) async {
-    final response =
-        await http.get(Uri.parse('http://localhost:4000/search?query=$query'));
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      List<String> suggestions =
-          List<String>.from(data.map((item) => item['name'].toString()));
-      return suggestions;
-    } else {
-      throw Exception('Failed to fetch suggestions');
+  // Future<List<Suggestion>> fetchSuggestions(String query) async {
+  //   final response =
+  //       await http.get(Uri.parse('http://localhost:4000/search?query=$query'));
+  //   if (response.statusCode == 200) {
+  //     final data = json.decode(response.body);
+  //     List<Suggestion> suggestions = data.map<Suggestion>((item) {
+  //       return Suggestion(
+  //         name: item['name'].toString(),
+  //         photoUrl: item['photoUrl'].toString(),
+  //       );
+  //     }).toList();
+  //     return suggestions;
+  //   } else {
+  //     throw Exception('Failed to fetch suggestions');
+  //   }
+  // }
+
+  Future<List<Map<String, dynamic>>> searchDocuments(String query) async {
+    final collectionRef = FirebaseFirestore.instance.collection('sites');
+
+    try {
+      final snapshot = await collectionRef.get();
+      final documents = snapshot.docs.map((doc) => doc.data());
+
+      // Check if any field name matches the query
+      final matchingDocuments = documents.where((doc) =>
+          doc['name']?.toLowerCase().contains(query.toLowerCase()) ?? false);
+
+      return matchingDocuments.toList();
+    } catch (error) {
+      throw Exception('Error searching documents: $error');
     }
   }
 
@@ -35,7 +64,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final themeChanger = Provider.of<ThemeChanger>(context);
+    // final themeChanger = Provider.of<ThemeChanger>(context);
     return SizedBox(
       height: double.infinity,
       // width: double.infinity,
@@ -105,12 +134,12 @@ class _MySearchScreenState extends State<MySearchScreen> {
                     },
                     icon: const Icon(Icons.filter_5_outlined)),
                 enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.redAccent, width: 2),
+                    borderSide: BorderSide(color: Colors.white60, width: 1.5),
                     borderRadius: BorderRadius.all(
                       Radius.circular(30),
                     )),
                 focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.redAccent, width: 2),
+                  borderSide: BorderSide(color: Colors.white60, width: 1.5),
                   // borderSide: BorderSide(color: Colors.redAccent),
                   borderRadius: BorderRadius.all(
                     Radius.circular(30),
@@ -124,30 +153,46 @@ class _MySearchScreenState extends State<MySearchScreen> {
               if (pattern.isEmpty) {
                 return [];
               }
-              List<String> suggestions = await fetchSuggestions(pattern);
+              List<Map<String, dynamic>> matchingDocuments =
+                  await searchDocuments(pattern);
+              List<Suggestion> suggestions = matchingDocuments.map((doc) {
+                return Suggestion(
+                  name: doc['name'].toString(),
+                  photoUrl: doc['photoUrl'].toString(),
+                );
+              }).toList();
               return suggestions;
             },
             itemBuilder: (context, suggestion) {
+              // print(suggestion.name);
               return ListTile(
-                title: Text(suggestion),
+                leading: CircleAvatar(
+                  child: ClipOval(
+                    child: Image.network(
+                      suggestion.photoUrl.toString(),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                title: Text(suggestion.name.toString()),
               );
             },
             onSuggestionSelected: (suggestion) {
-              _searchController.text = suggestion;
+              _searchController.text = suggestion.name;
               // Do something when a suggestion is
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Details(name: suggestion),
+                    builder: (context) => Details(name: suggestion.name),
                   ));
-              print('Selected suggestion: $suggestion');
+              print('Selected suggestion: ${suggestion.name}');
             },
           ),
           SizedBox(
             height: 5,
           ),
           SizedBox(
-            height: 40,
+            height: 35,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -157,7 +202,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
                   style: GoogleFonts.quicksand(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    // color: const Color.fromARGB(149, 255, 255, 255),
+                    color: Colors.white60,
                   ),
                 ),
                 SizedBox(

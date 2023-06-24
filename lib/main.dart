@@ -1,16 +1,56 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:first/components/autcomplete.dart';
 import 'package:first/components/map.dart';
 import 'package:first/screens/details.dart';
 import 'package:first/screens/home.dart';
+import 'package:first/screens/login.dart';
 import 'package:flutter/material.dart';
 import './MyApp.dart';
 import 'package:provider/provider.dart';
+import './screens/first_timers_updated.dart';
+import './firebase_options.dart';
+// void main() {
+//   runApp(
+//     ChangeNotifierProvider(
+//       create: (_) => ThemeChanger(Themes.darkTheme),
+//       child: const AppWrapper(),
+//     ),
+//   );
+// }
 
-void main() {
+// import './MyApp.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeChanger(Themes.darkTheme),
-      child: const AppWrapper(),
+    MaterialApp(
+      initialRoute: '/login',
+      routes: {
+        // '/': (context) => Home(),
+        '/login': (context) {
+          final user = FirebaseAuth.instance.currentUser;
+          if (user != null) {
+            return Home();
+          } else {
+            return LoginPage();
+          }
+        },
+        '/dashboard': (context) {
+          final user = FirebaseAuth.instance.currentUser;
+          if (user != null) {
+            return Home();
+          } else {
+            return LoginPage();
+          }
+        },
+      },
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(), // Set the dark theme
+      themeMode: ThemeMode.dark, // Set the theme mode to dark
+      home: const FirstTimerPage(),
     ),
   );
 }
@@ -23,6 +63,7 @@ class AppWrapper extends StatelessWidget {
     final themeChanger = Provider.of<ThemeChanger>(context);
 
     return MaterialApp(
+      title: "Travel App",
       debugShowCheckedModeBanner: false,
       theme: themeChanger.currentTheme,
       home: const Home(),

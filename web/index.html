@@ -39,7 +39,19 @@
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCScMU_4qlajHQsl8RvxkqkiZ8Dtjdv8hw"></script>
-
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyCScMU_4qlajHQsl8RvxkqkiZ8Dtjdv8hw",
+  authDomain: "tourism-app-7b702.firebaseapp.com",
+  projectId: "tourism-app-7b702",
+  storageBucket: "tourism-app-7b702.appspot.com",
+  messagingSenderId: "777582167550",
+  appId: "1:777582167550:web:5ddc5d48352679d0d16caf",
+  measurementId: "G-T8PBCNBFBC"
+};
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  
 </head>
 <body>
   <script>
@@ -57,5 +69,6 @@
       });
     });
   </script>
+
 </body>
 </html>

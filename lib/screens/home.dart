@@ -1,6 +1,8 @@
 import 'dart:convert';
 // import 'dart:js_interop';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/components/Carousel.dart';
 import 'package:first/components/autcomplete.dart';
 import 'package:first/screens/details.dart';
@@ -9,10 +11,9 @@ import 'package:first/screens/first_timers_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../components/myDrawerListTile.dart';
-import '../login.dart';
+import './login.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-
 import '../main.dart';
 
 class Suggestion {
@@ -36,66 +37,112 @@ class _HomeState extends State<Home> {
   List<dynamic> items = [];
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    fetchData().then((data) {
-      setState(() {
-        items = data;
-      });
-    });
-    _searchBox.addListener(_onTextChange);
-  }
-
-  @override
   void dispose() {
     _searchBox.dispose();
     super.dispose();
   }
 
-  bool show = false;
-  void _onTextChange() {
-    setState(() {
-      show = true;
-    });
+  void getUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userId = user.uid;
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      String? userName = snapshot.data()?['username'] as String?;
+      setState(() {
+        _username = userName;
+      });
+      print('User Name: $userName');
+    } else {}
   }
 
-  Future<List<dynamic>> fetchData() async {
-    final response = await http.get(Uri.parse('http://localhost:4000/search'));
-
-    if (response.statusCode == 200) {
-      // Parse the response body as a list of objects
-      final List<dynamic> data = jsonDecode(response.body);
-
-      return data;
-    } else {
-      throw Exception('Failed to fetch data');
+  void signOutUser() async {
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      await auth.signOut();
+      // Redirect the user to the login screen or any other screen as needed
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginPage(),
+          ));
+    } catch (e) {
+      print(e);
     }
+  }
+
+  bool show = false;
+  // void _onTextChange() {
+  //   setState(() {
+  //     show = true;
+  //   });
+  // }
+
+  String? _username;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserData();
   }
 
   @override
   Widget build(BuildContext context) {
-    final themeChanger = Provider.of<ThemeChanger>(context);
+    // final themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        title: Text(
+          '${_username}',
+          style: GoogleFonts.quicksand(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            // color: const Color.fromARGB(149, 255, 255, 255),
+          ),
+        ),
+        centerTitle: true,
         elevation: 0,
         actions: [
-          // IconTheme(
-          //     data: IconThemeData(color: Theme.of(context).iconTheme.color),
-          //     child: IconButton(
-          //         onPressed: () => {},
-          //         icon: const Icon(Icons.verified_user_rounded))),
-          IconButton(
-            onPressed: () {
-              if (themeChanger.currentTheme == Themes.darkTheme) {
-                themeChanger.setTheme(Themes.lightTheme);
-              } else {
-                themeChanger.setTheme(Themes.darkTheme);
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'logout') {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Logout'),
+                      content: Text('Are you sure you want to log out?'),
+                      actions: [
+                        TextButton(
+                          child: Text('Cancel'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: Text('Logout'),
+                          onPressed: () {
+                            signOutUser();
+                            // Call the signOutUser function
+                            // Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               }
             },
-            icon: const Icon(Icons.toggle_on_sharp),
-          )
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem<String>(
+                value: 'logout',
+                child: Text('Logout'),
+              ),
+            ],
+          ),
         ],
       ),
       drawer: SafeArea(
@@ -103,11 +150,69 @@ class _HomeState extends State<Home> {
           child: Column(
             children: [
               Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Row(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      child: Icon(
+                        Icons.supervised_user_circle_sharp,
+                        size: 75,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 55, top: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(_username!,
+                              style: GoogleFonts.quicksand(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                // color: const Color.fromARGB(149, 255, 255, 255),
+                              )),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Text(FirebaseAuth.instance.currentUser!.email!,
+                              style: GoogleFonts.quicksand(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.redAccent,
+                              )),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                //  ElevatedButton(
+                //     style: ButtonStyle(
+                //         minimumSize:
+                //             MaterialStatePropertyAll(Size(double.infinity, 30)),
+                //         backgroundColor:
+                //             MaterialStatePropertyAll(Colors.redAccent)),
+                //     onPressed: () {
+                //       Navigator.pushNamed(
+                //         context,
+                //         "/login",
+                //       );
+                //     },
+                //     child: Text(
+                //       "Sign In",
+                //       style: GoogleFonts.quicksand(
+                //         fontSize: 16,
+                //         fontWeight: FontWeight.w500,
+                //         // color: const Color.fromARGB(149, 255, 255, 255),
+                //       ),
+                //     )),
                 height: MediaQuery.of(context).size.height * 0.2,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage("assets/images/desert.jpg"),
+                    image: AssetImage("assets/images/back.jpeg"),
                   ),
                 ),
               ),
@@ -116,16 +221,16 @@ class _HomeState extends State<Home> {
                 leadingIcon: Icons.home,
                 onTap: () {},
               ),
-              MyDrawerListTile(
-                title: "Sign In",
-                leadingIcon: Icons.exit_to_app_outlined,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                },
-              ),
+              // MyDrawerListTile(
+              //   title: "Sign In",
+              //   leadingIcon: Icons.exit_to_app_outlined,
+              //   onTap: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(builder: (context) => const LoginPage()),
+              //     );
+              //   },
+              // ),
               MyDrawerListTile(title: "Tour", onTap: () {}),
               MyDrawerListTile(title: "Go", onTap: () {}),
               MyDrawerListTile(title: "Next", onTap: () {}),
@@ -185,40 +290,7 @@ class _HomeState extends State<Home> {
                   )
                 ],
               ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Text(
-              //       'Recent Searches',
-              //       style: GoogleFonts.quicksand(
-              //         fontSize: 15,
-              //         fontWeight: FontWeight.w400,
-              //         // color: const Color.fromARGB(149, 255, 255, 255),
-              //       ),
-              //     ),
-              //     InkWell(
-              //       onTap: () => {},
-              //       child: Row(
-              //         children: [
-              //           Text(
-              //             'Clear History',
-              //             style: GoogleFonts.quicksand(
-              //                 fontSize: 15,
-              //                 fontWeight: FontWeight.w400,
-              //                 color: const Color.fromARGB(214, 241, 176, 176)),
-              //           ),
-              //           const SizedBox(
-              //             width: 10,
-              //           ),
-              //           const Icon(
-              //             Icons.delete_outline,
-              //             color: Color.fromARGB(214, 241, 176, 176),
-              //           )
-              //         ],
-              //       ),
-              //     )
-              //   ],
-              // ),
+
               const SizedBox(
                 height: 4,
               ),
@@ -331,9 +403,10 @@ class ForYouWidget extends StatelessWidget {
       width: 160,
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
       decoration: const BoxDecoration(
-          color: Color.fromARGB(191, 23, 23, 23),
-          boxShadow: [BoxShadow(color: Colors.black12, spreadRadius: 2)],
-          borderRadius: BorderRadius.all(Radius.circular(7))),
+        color: Color.fromARGB(191, 23, 23, 23),
+        // boxShadow: [BoxShadow(color: Colors.black12, spreadRadius: 2)],
+        borderRadius: BorderRadius.all(Radius.circular(7)),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -475,9 +548,9 @@ class ForYouWidget extends StatelessWidget {
                       ));
                 },
                 child: Icon(
-                  Icons.arrow_right_alt_outlined,
-                  color: Colors.redAccent,
-                  size: 35,
+                  Icons.arrow_right_alt_sharp,
+                  color: Colors.white60,
+                  size: 24,
                 ),
               )
             ],

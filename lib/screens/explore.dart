@@ -26,63 +26,42 @@ class Explore extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          leading: Container(
-              padding: EdgeInsets.all(12),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7),
-                    color: Colors.white.withOpacity(0.8),
-                  ),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.redAccent,
-                    size: 20,
-                  ),
+        leading: Container(
+            padding: EdgeInsets.all(12),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(7),
+                  color: Colors.white.withOpacity(0.8),
                 ),
-              )),
-          title: Text(
-            "Explore",
-            style: GoogleFonts.quicksand(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: const Color.fromARGB(149, 255, 255, 255)),
-          ),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          actions: [
-            Container(
-                width: 57,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(7),
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                    child: const Icon(
-                      Icons.bookmark_outline,
-                      color: Colors.redAccent,
-                      size: 20,
-                    ),
-                  ),
-                )),
-          ]),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.redAccent,
+                  size: 20,
+                ),
+              ),
+            )),
+        title: Text(
+          "Explore",
+          style: GoogleFonts.quicksand(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: const Color.fromARGB(149, 255, 255, 255)),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
       body: GridView.builder(
         itemCount: imageUrls.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3, // Adjust the number of columns as needed
-          mainAxisSpacing: 1.0, // Adjust the spacing between images vertically
+          mainAxisSpacing: 5.0, // Adjust the spacing between images vertically
           crossAxisSpacing:
-              1.0, // Adjust the spacing between images horizontally
+              5.0, // Adjust the spacing between images horizontally
         ),
         itemBuilder: (context, index) {
           final random = Random();

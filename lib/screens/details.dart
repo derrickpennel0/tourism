@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/components/mainCarousel.dart';
 import 'package:first/components/map.dart';
+import 'package:first/styles/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -171,9 +172,24 @@ class _DetailsState extends State<Details> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(7),
-                            color: Colors.white.withOpacity(0.8),
-                          ),
+                              border: Border.all(
+                                  color: Color.fromARGB(151, 197, 11, 11),
+                                  width: 2),
+                              borderRadius: BorderRadius.circular(100),
+                              color: Styles.tileColor,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: const Color.fromARGB(
+                                        255, 116, 116, 116),
+                                    spreadRadius: 2.5,
+                                    blurRadius: 0.7,
+                                    offset: Offset(1, 0.5)),
+                                BoxShadow(
+                                    color: Colors.black,
+                                    spreadRadius: 2.5,
+                                    blurRadius: 2,
+                                    offset: Offset(-1.5, -1))
+                              ]),
                           child: const Icon(
                             Icons.arrow_back,
                             color: Colors.redAccent,
@@ -229,142 +245,148 @@ class _DetailsState extends State<Details> {
               body: Column(
                 children: [
                   Expanded(
-                    child: Container(
-                        color: const Color.fromARGB(191, 23, 23, 23),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        // margin: EdgeInsets.only(bottom: 10),
-                        height: MediaQuery.of(context).size.height * 0.3,
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: double.infinity,
-                              width: double.infinity,
-                              // margin: EdgeInsets.symmetric(vertical: 7),
-                              decoration: const BoxDecoration(
-                                  // color: Colors.white,
-                                  // borderRadius: BorderRadius.all(Radius.circular(10)),
+                    child: AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: Container(
+                          color: const Color.fromARGB(191, 23, 23, 23),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          // margin: EdgeInsets.only(bottom: 10),
+                          height: MediaQuery.of(context).size.height * 0.3,
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: double.infinity,
+                                width: double.infinity,
+                                // margin: EdgeInsets.symmetric(vertical: 7),
+                                decoration: const BoxDecoration(
+                                    // color: Colors.white,
+                                    // borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    images[0],
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (BuildContext context,
+                                        Object exception,
+                                        StackTrace? stackTrace) {
+                                      // Handle the error and provide an alternative widget or fallback image
+                                      return Text('Failed to load image');
+                                    },
                                   ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  images[0],
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (BuildContext context,
-                                      Object exception,
-                                      StackTrace? stackTrace) {
-                                    // Handle the error and provide an alternative widget or fallback image
-                                    return Text('Failed to load image');
-                                  },
                                 ),
                               ),
-                            ),
-                            Positioned(
-                                top: 0,
-                                right: 0,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 20),
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.3,
-                                  width: 70,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        height: 50,
-                                        width: 50,
-                                        // margin: EdgeInsets.symmetric(vertical: 7),
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.white),
+                              Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 20),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.3,
+                                    width: 70,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          height: 50,
+                                          width: 50,
+                                          // margin: EdgeInsets.symmetric(vertical: 7),
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.white),
+                                          ),
+                                          child: Image.network(
+                                            images[1],
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (BuildContext context,
+                                                Object exception,
+                                                StackTrace? stackTrace) {
+                                              // Handle the error and provide an alternative widget or fallback image
+                                              return Text(
+                                                  'Failed to load image');
+                                            },
+                                          ),
                                         ),
-                                        child: Image.network(
-                                          images[1],
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (BuildContext context,
-                                              Object exception,
-                                              StackTrace? stackTrace) {
-                                            // Handle the error and provide an alternative widget or fallback image
-                                            return Text('Failed to load image');
-                                          },
+                                        Container(
+                                          height: 50,
+                                          width: 70,
+                                          margin:
+                                              EdgeInsets.symmetric(vertical: 7),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.white)),
+                                          child: Image.network(
+                                            images[0],
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (BuildContext context,
+                                                Object exception,
+                                                StackTrace? stackTrace) {
+                                              // Handle the error and provide an alternative widget or fallback image
+                                              return Text(
+                                                  'Failed to load image');
+                                            },
+                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                        height: 50,
-                                        width: 70,
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 7),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.white)),
-                                        child: Image.network(
-                                          images[0],
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (BuildContext context,
-                                              Object exception,
-                                              StackTrace? stackTrace) {
-                                            // Handle the error and provide an alternative widget or fallback image
-                                            return Text('Failed to load image');
-                                          },
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MainCarousel(images: images),
-                                            ),
-                                          );
-                                        },
-                                        child: Stack(
-                                          children: [
-                                            Container(
-                                              height: 50,
-                                              width: 50,
-                                              // margin: EdgeInsets.symmetric(vertical: 7),
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.white),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MainCarousel(
+                                                        images: images),
                                               ),
-                                              child: Image.network(
-                                                images[2] ??
-                                                    "https://media-cdn.tripadvisor.com/media/photo-f/13/ed/95/e5/kalakpa-nature-reserve.jpg",
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (BuildContext
-                                                        context,
-                                                    Object exception,
-                                                    StackTrace? stackTrace) {
-                                                  // Handle the error and provide an alternative widget or fallback image
-                                                  return Text('');
-                                                },
+                                            );
+                                          },
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                height: 50,
+                                                width: 50,
+                                                // margin: EdgeInsets.symmetric(vertical: 7),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.white),
+                                                ),
+                                                child: Image.network(
+                                                  images[2] ??
+                                                      "https://media-cdn.tripadvisor.com/media/photo-f/13/ed/95/e5/kalakpa-nature-reserve.jpg",
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (BuildContext
+                                                          context,
+                                                      Object exception,
+                                                      StackTrace? stackTrace) {
+                                                    // Handle the error and provide an alternative widget or fallback image
+                                                    return Text('');
+                                                  },
+                                                ),
                                               ),
-                                            ),
-                                            Positioned(
-                                              child: Container(
-                                                  height: 50,
-                                                  width: 50,
-                                                  alignment: Alignment.center,
-                                                  // margin: EdgeInsets.symmetric(vertical: 7),
-                                                  decoration: BoxDecoration(
-                                                    color: Color.fromARGB(
-                                                        134, 0, 0, 0),
-                                                    border: Border.all(
-                                                        color: Colors.white),
-                                                  ),
-                                                  child: const Center(
-                                                      child: Text("+5"))),
-                                            )
-                                          ],
+                                              Positioned(
+                                                child: Container(
+                                                    height: 50,
+                                                    width: 50,
+                                                    alignment: Alignment.center,
+                                                    // margin: EdgeInsets.symmetric(vertical: 7),
+                                                    decoration: BoxDecoration(
+                                                      color: Color.fromARGB(
+                                                          134, 0, 0, 0),
+                                                      border: Border.all(
+                                                          color: Colors.white),
+                                                    ),
+                                                    child: const Center(
+                                                        child: Text("+5"))),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ))
-                          ],
-                        )),
+                                      ],
+                                    ),
+                                  ))
+                            ],
+                          )),
+                    ),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,

@@ -145,10 +145,10 @@ class _LoginPageState extends State<LoginPage> {
       child: SafeArea(
         child: Scaffold(
           // key: _scaffoldKey,
-          // appBar: AppBar(
-          //   elevation: 0,
-          //   backgroundColor: Colors.transparent,
-          // ),
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+          ),
           extendBodyBehindAppBar: true,
           body: Stack(
             children: [

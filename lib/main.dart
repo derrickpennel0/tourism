@@ -5,6 +5,7 @@ import 'package:first/components/map.dart';
 import 'package:first/screens/details.dart';
 import 'package:first/screens/home.dart';
 import 'package:first/screens/login.dart';
+import 'package:first/styles/app_style.dart';
 import 'package:flutter/material.dart';
 import './MyApp.dart';
 import 'package:provider/provider.dart';
@@ -26,9 +27,9 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MaterialApp(
-      initialRoute: '/login',
+      initialRoute: '/',
       routes: {
-        // '/': (context) => Home(),
+        '/': (context) => const FirstTimerPage(),
         '/login': (context) {
           final user = FirebaseAuth.instance.currentUser;
           if (user != null) {
@@ -47,10 +48,9 @@ void main() async {
         },
       },
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(), // Set the dark theme
-      themeMode: ThemeMode.dark, // Set the theme mode to dark
-      home: const FirstTimerPage(),
+      theme: ThemeData.dark().copyWith(
+          scaffoldBackgroundColor: Styles.backgroundColor,
+          primaryColor: Colors.redAccent),
     ),
   );
 }
@@ -76,7 +76,6 @@ class Themes {
   static final lightTheme = ThemeData(
       iconTheme: const IconThemeData(
         color: Color.fromARGB(255, 35, 35, 35), // Set your desired icon color
-        // size: 24, // Set your desired icon size
       ),
       focusColor: const Color.fromARGB(255, 254, 152, 152),
       primaryColor: Colors.redAccent,

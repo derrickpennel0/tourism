@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 
 import '../main.dart';
+import '../styles/app_style.dart';
 
 class Suggestion {
   final String name;
@@ -23,24 +24,6 @@ class MySearchScreen extends StatefulWidget {
 
 class _MySearchScreenState extends State<MySearchScreen> {
   final TextEditingController _searchController = TextEditingController();
-  // List<String> _suggestions = [];
-
-  // Future<List<Suggestion>> fetchSuggestions(String query) async {
-  //   final response =
-  //       await http.get(Uri.parse('http://localhost:4000/search?query=$query'));
-  //   if (response.statusCode == 200) {
-  //     final data = json.decode(response.body);
-  //     List<Suggestion> suggestions = data.map<Suggestion>((item) {
-  //       return Suggestion(
-  //         name: item['name'].toString(),
-  //         photoUrl: item['photoUrl'].toString(),
-  //       );
-  //     }).toList();
-  //     return suggestions;
-  //   } else {
-  //     throw Exception('Failed to fetch suggestions');
-  //   }
-  // }
 
   Future<List<Map<String, dynamic>>> searchDocuments(String query) async {
     final collectionRef = FirebaseFirestore.instance.collection('sites');
@@ -122,14 +105,16 @@ class _MySearchScreenState extends State<MySearchScreen> {
                   filled: true,
                   // focusColor: const Color.fromARGB(191, 23, 23, 23),
                   // iconColor: const Color.fromARGB(191, 23, 23, 23),
-                  fillColor: const Color.fromARGB(191, 23, 23, 23),
+                  fillColor: Styles.tileColor,
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                   hintStyle: GoogleFonts.quicksand(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
                     // color: const Color.fromARGB(149, 255, 255, 255),
                   ),
                   suffixIcon: IconButton(
-                      color: Colors.white,
+                      color: Colors.grey.shade600,
                       onPressed: () {
                         showDialog(
                           context: context,
@@ -180,7 +165,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
                           },
                         );
                       },
-                      icon: const Icon(Icons.filter_5_outlined)),
+                      icon: const Icon(Icons.filter_list_sharp)),
                   enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
                         color: const Color.fromARGB(191, 23, 23, 23),
@@ -198,7 +183,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
                   hintText: "Search location here ....",
                   prefixIcon: Icon(
                     Icons.search,
-                    color: Colors.white,
+                    color: Colors.grey.shade600,
                   ),
                 ),
               ),
@@ -251,14 +236,16 @@ class _MySearchScreenState extends State<MySearchScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  "Filtered by : ${checkedItems.contains(true) ? '' : 'None'}",
-                  style: GoogleFonts.quicksand(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white60,
-                  ),
-                ),
+                checkedItems.contains(true)
+                    ? Text(
+                        "Filtered by : ${checkedItems.contains(true) ? '' : 'None'}",
+                        style: GoogleFonts.quicksand(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white60,
+                        ),
+                      )
+                    : SizedBox(),
                 Expanded(
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,

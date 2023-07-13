@@ -59,14 +59,14 @@ class _InterestButtonState extends State<InterestButton> {
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(25.0),
               side: BorderSide(
                   color: widget.borderColor,
                   style: BorderStyle.solid,
                   width: 10.0)),
         ),
         padding: MaterialStateProperty.all<EdgeInsets>(
-          EdgeInsets.all(12),
+          EdgeInsets.all(8),
         ),
         elevation: MaterialStateProperty.all(5.0),
         backgroundColor: MaterialStateProperty.all(widget.backgroundColor),

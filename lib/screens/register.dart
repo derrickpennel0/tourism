@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/screens/login.dart';
+import 'package:first/styles/app_style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -106,8 +107,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
-        // backgroundColor: Colors.white,
+        // backgroundColor: Colors.black,
 
         // appBar: AppBar(
         //   title: const Text("Hey"),
@@ -119,7 +122,11 @@ class _RegisterPageState extends State<RegisterPage> {
         key: _formKey,
         child: Column(
           children: [
+            SizedBox(
+              height: _screenSize.height * 0.05,
+            ),
             Container(
+              color: Styles.backgroundColor,
               padding: const EdgeInsets.only(top: 40.0),
               alignment: Alignment.center,
               child: Text(
@@ -127,13 +134,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 style: GoogleFonts.quicksand(
                     fontSize: 30.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.redAccent),
+                    color: Styles.brandMainColor),
               ),
             ),
             LayoutBuilder(
               builder: (context, constraints) {
                 if (constraints.maxWidth > 400) {
                   // Use Row when the screen width is greater than 400
+                  //charley continue
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -141,14 +149,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         "Join us and embark on unforgettable",
                         style: GoogleFonts.quicksand(
                           fontSize: 20,
-                          color: Colors.white60,
+                          color: Styles.brandLightShadeColor,
                         ),
                       ),
                       Text(
                         " adventures",
                         style: GoogleFonts.quicksand(
                           fontSize: 20,
-                          color: Colors.white60,
+                          color: Styles.brandLightShadeColor,
                         ),
                       ),
                     ],
@@ -166,7 +174,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           "Join us and embark on unforgettable",
                           style: GoogleFonts.quicksand(
                             fontSize: 15,
-                            color: Colors.white,
+                            color: Colors.grey.shade600,
                           ),
                         ),
                       ),
@@ -176,7 +184,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           "adventures",
                           style: GoogleFonts.quicksand(
                             fontSize: 15,
-                            color: Colors.white,
+                            color: Colors.grey.shade600,
                           ),
                         ),
                       ),
@@ -191,13 +199,14 @@ class _RegisterPageState extends State<RegisterPage> {
             // ),
             // Join us and embark on unforgettable adventures
             SizedBox(
-              height: 45,
+              height: 20,
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
+                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
               child: TextFormField(
-                style: GoogleFonts.quicksand(color: Colors.white, fontSize: 15),
+                style: GoogleFonts.quicksand(
+                    color: Styles.supportingTextDeepShadeColor),
 
                 controller: _username,
                 validator: (value) {
@@ -210,14 +219,28 @@ class _RegisterPageState extends State<RegisterPage> {
                 key: const ValueKey("username"),
                 keyboardType: TextInputType.name,
                 onTap: () {},
-                decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white70)),
+                decoration: InputDecoration(
+                  filled: true,
+                  focusColor: Styles.brandDeepShadeColor,
+                  // fillColor: Color.fromARGB(255, 237, 232, 232),
+                  fillColor: Colors.grey.shade300,
+
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Styles.supportingTextDeepShadeColor)),
+                  labelText: "Enter Username",
+                  // hintText: 'Enter your email',
+                  // hintStyle: TextStyle(
+                  //     color: Styles.supportingTextDeepShadeColor),
+                  enabled: true,
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Styles.supportingTextLightShadeColor)),
+                  labelStyle: const TextStyle(color: Colors.black54),
                   // labelStyle: const TextStyle(color: Colors.black),
                   // label: Text("HEy")
-                  labelStyle: TextStyle(color: Colors.white),
-                  labelText: "Enter Username",
-                  prefixIcon: Icon(Icons.man_2_outlined, color: Colors.white),
+
+                  prefixIcon: Icon(Icons.man_2_outlined, color: Colors.black54),
 
                   // Icon(Icons.visibility)
                 ),
@@ -226,13 +249,14 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 0.0),
               child: TextFormField(
-                style: GoogleFonts.quicksand(color: Colors.white),
+                style: GoogleFonts.quicksand(
+                    color: Styles.supportingTextDeepShadeColor),
                 controller: _email,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Please enter your full name";
+                    return "Please enter your email address";
                   } else if (!value.contains('@')) {
                     return "Characters must include the @ symbol";
                   } else {
@@ -242,14 +266,28 @@ class _RegisterPageState extends State<RegisterPage> {
                 key: const ValueKey("emailAddress"),
                 keyboardType: TextInputType.emailAddress,
                 onTap: () {},
-                decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white70)),
+                decoration: InputDecoration(
+                  filled: true,
+                  focusColor: Styles.brandDeepShadeColor,
+                  // fillColor: Color.fromARGB(255, 237, 232, 232),
+                  fillColor: Colors.grey.shade300,
+
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Styles.supportingTextDeepShadeColor)),
+                  labelText: "Enter Email Address",
+                  // hintText: 'Enter your email',
+                  // hintStyle: TextStyle(
+                  //     color: Styles.supportingTextDeepShadeColor),
+                  enabled: true,
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Styles.supportingTextLightShadeColor)),
+                  labelStyle: const TextStyle(color: Colors.black54),
                   // labelStyle: const TextStyle(color: Colors.black),
                   // label: Text("HEy")
-                  labelStyle: TextStyle(color: Colors.white),
-                  labelText: "Enter Email Address",
-                  prefixIcon: Icon(Icons.mail_outlined, color: Colors.white),
+
+                  prefixIcon: Icon(Icons.mail_outlined, color: Colors.black54),
 
                   // Icon(Icons.visibility)
                 ),
@@ -257,9 +295,10 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 30.0, vertical: 10.0),
+                    horizontal: 30.0, vertical: 15.0),
                 child: IntlPhoneField(
-                  style: GoogleFonts.quicksand(color: Colors.white),
+                  style: GoogleFonts.quicksand(
+                      color: Styles.supportingTextDeepShadeColor),
                   disableLengthCheck: true,
                   controller: _phoneNumber,
                   validator: (phone) {
@@ -276,17 +315,33 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                   dropdownIcon: const Icon(
                     Icons.arrow_drop_down,
-                    color: Colors.white,
+                    color: Colors.black54,
                   ),
                   dropdownTextStyle: const TextStyle(color: Colors.black),
                   key: const ValueKey("phone"),
                   keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
+                    filled: true,
+                    focusColor: Styles.brandDeepShadeColor,
+                    // fillColor: Color.fromARGB(255, 237, 232, 232),
+                    fillColor: Colors.grey.shade300,
+
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Styles.supportingTextDeepShadeColor)),
                     labelText: 'Enter Phone Number',
-                    labelStyle: TextStyle(color: Colors.white),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white70),
-                    ),
+                    // hintText: 'Enter your email',
+                    // hintStyle: TextStyle(
+                    //     color: Styles.supportingTextDeepShadeColor),
+                    enabled: true,
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Styles.supportingTextLightShadeColor)),
+                    labelStyle: const TextStyle(color: Colors.black54),
+                    // labelStyle: const TextStyle(color: Colors.black),
+                    // label: Text("HEy")
+
+                    // Icon(Icons.visibility)
                   ),
                   initialCountryCode: 'GH',
                   onChanged: (phone) {
@@ -300,7 +355,8 @@ class _RegisterPageState extends State<RegisterPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: TextFormField(
-                style: GoogleFonts.quicksand(color: Colors.white),
+                style: GoogleFonts.quicksand(
+                    color: Styles.supportingTextDeepShadeColor),
                 controller: _password,
                 validator: (value) {
                   if (value == "" || value!.isEmpty) {
@@ -315,14 +371,28 @@ class _RegisterPageState extends State<RegisterPage> {
                 keyboardType: TextInputType.visiblePassword,
                 onTap: () {},
                 decoration: InputDecoration(
-                  enabledBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white70)),
+                  filled: true,
+                  focusColor: Styles.brandDeepShadeColor,
+                  // fillColor: Color.fromARGB(255, 237, 232, 232),
+                  fillColor: Colors.grey.shade300,
+
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Styles.supportingTextDeepShadeColor)),
+                  labelText: "Enter Password",
+                  // hintText: 'Enter your email',
+                  // hintStyle: TextStyle(
+                  //     color: Styles.supportingTextDeepShadeColor),
+                  enabled: true,
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Styles.supportingTextLightShadeColor)),
+                  labelStyle: const TextStyle(color: Colors.black54),
                   // labelStyle: const TextStyle(color: Colors.black),
                   // label: Text("HEy")
-                  labelStyle: const TextStyle(color: Colors.white),
-                  labelText: "Enter Password",
+
                   prefixIcon:
-                      const Icon(Icons.password_rounded, color: Colors.white),
+                      const Icon(Icons.password_rounded, color: Colors.black54),
                   suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -331,7 +401,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                       child: Icon(
                           _visibile ? Icons.visibility : Icons.visibility_off,
-                          color: _visibile ? Colors.white : Colors.redAccent)),
+                          color:
+                              _visibile ? Colors.black54 : Colors.redAccent)),
+
                   // Icon(Icons.visibility)
                 ),
                 obscureText: _visibile,
@@ -339,9 +411,10 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
               child: TextFormField(
-                style: GoogleFonts.quicksand(color: Colors.white),
+                style: GoogleFonts.quicksand(
+                    color: Styles.supportingTextDeepShadeColor),
                 controller: _password2,
                 validator: (value) {
                   if (value == "" || value!.isEmpty) {
@@ -358,14 +431,28 @@ class _RegisterPageState extends State<RegisterPage> {
                 keyboardType: TextInputType.visiblePassword,
                 onTap: () {},
                 decoration: InputDecoration(
-                  enabledBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white70)),
+                  filled: true,
+                  focusColor: Styles.brandDeepShadeColor,
+                  // fillColor: Color.fromARGB(255, 237, 232, 232),
+                  fillColor: Colors.grey.shade300,
+
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Styles.supportingTextDeepShadeColor)),
+                  labelText: "Re-Enter Password",
+                  // hintText: 'Enter your email',
+                  // hintStyle: TextStyle(
+                  //     color: Styles.supportingTextDeepShadeColor),
+                  enabled: true,
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Styles.supportingTextLightShadeColor)),
+                  labelStyle: const TextStyle(color: Colors.black54),
                   // labelStyle: const TextStyle(color: Colors.black),
                   // label: Text("HEy")
-                  labelStyle: const TextStyle(color: Colors.white),
-                  labelText: "Re-Enter Password",
+//Charley continue finish the country one make u continue.. i almost finish dey chop
                   prefixIcon:
-                      const Icon(Icons.password_rounded, color: Colors.white),
+                      const Icon(Icons.password_rounded, color: Colors.black54),
                   suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -374,17 +461,20 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                       child: Icon(
                           _visibile ? Icons.visibility : Icons.visibility_off,
-                          color: _visibile ? Colors.white : Colors.redAccent)),
-                  // Icon(Icons.visibility)
+                          color:
+                              _visibile ? Colors.black54 : Colors.redAccent)),
+
+                  // You fit continue
                 ),
                 obscureText: _visibile,
               ),
             ),
             Padding(
-                padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 30.0, vertical: 10.0),
                 child: SizedBox(
-                  width: 200,
-                  height: 40,
+                  width: double.infinity,
+                  height: 55,
                   child: OutlinedButton(
                     style: ButtonStyle(
                       animationDuration: const Duration(milliseconds: 200),
@@ -413,7 +503,7 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Text.rich(
                 TextSpan(
                     text: "Already a member?",
-                    style: GoogleFonts.quicksand(color: Colors.white),
+                    style: GoogleFonts.quicksand(color: Colors.grey.shade600),
                     children: [
                       WidgetSpan(
                         child: SizedBox(width: 5),
@@ -422,9 +512,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       TextSpan(
                         text: "Sign In",
                         style: GoogleFonts.quicksand(
-                          color: Colors.redAccent,
+                          color: Styles.brandMainColor,
                           decoration: TextDecoration.underline,
-                          decorationColor: Colors.redAccent,
+                          decorationColor: Styles.brandMainColor,
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {

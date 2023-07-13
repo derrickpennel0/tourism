@@ -41,22 +41,34 @@ class Explore extends StatelessWidget {
               },
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(7),
-                  color: Colors.white.withOpacity(0.8),
-                ),
+                    borderRadius: BorderRadius.circular(7),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.white,
+                          offset: Offset(-2, -2),
+                          blurRadius: 5,
+                          spreadRadius: 12),
+                      BoxShadow(
+                          color: Color.fromARGB(255, 191, 191, 191),
+                          offset: Offset(2, 2),
+                          blurRadius: 5)
+                    ]),
                 child: const Icon(
                   Icons.arrow_back,
                   color: Colors.redAccent,
                   size: 20,
                 ),
               ),
-            )),
+            )), // what you talk nu you go fit do am??
+        // show me where cotntainer dey
         title: Text(
           "Explore",
           style: GoogleFonts.quicksand(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              color: const Color.fromARGB(149, 255, 255, 255)),
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey.shade600,
+          ),
         ),
         centerTitle: true,
         elevation: 0,
@@ -67,17 +79,22 @@ class Explore extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final List documents = snapshot.data.docs;
-            return ListView.builder(
-                itemCount: documents.length,
-                itemBuilder: (context, index) {
-                  final document = documents[index];
-                  print('${document['name']} , ghana');
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                  itemCount: documents.length,
+                  itemBuilder: (context, index) {
+                    final document = documents[index];
+                    print('${document['name']} , ghana');
 
-                  return ForYouWidget(
+                    return ForYouWidget(
                       name: document['name'],
                       rating: document['rating'],
-                      location: document['locationString']);
-                });
+                      location: document['locationString'],
+                      image: document['images'][0],
+                    );
+                  }),
+            );
           } else {
             return Center(child: CircularProgressIndicator());
           }
@@ -91,12 +108,14 @@ class ForYouWidget extends StatefulWidget {
   final String name;
   final String location;
   final String rating;
+  final String image;
 
   const ForYouWidget({
     super.key,
     required this.name,
     required this.location,
     required this.rating,
+    required this.image,
   });
 
   @override
@@ -190,6 +209,15 @@ class _ForYouWidgetState extends State<ForYouWidget> {
     checkBookmarkStatus();
   }
 
+  List Images = [
+    'forest',
+    'lake',
+    'mountain',
+    'waterfalls',
+    'zoo',
+    'sanctuary'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -201,7 +229,7 @@ class _ForYouWidgetState extends State<ForYouWidget> {
             ))
       },
       child: Container(
-        margin: const EdgeInsets.only(bottom: 5),
+        margin: const EdgeInsets.only(bottom: 8),
         height: 210,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
@@ -212,6 +240,9 @@ class _ForYouWidgetState extends State<ForYouWidget> {
         child: Column(
           children: [
             Builder(builder: (context) {
+              //maek the image, taje some specific height.. hold on adey watch something
+              // okay so adey think say.. the image conatINERGO Tke like 70&
+              //MAKE I SEND VN
               return Expanded(
                 child: SizedBox(
                     // height: 200,
@@ -222,9 +253,17 @@ class _ForYouWidgetState extends State<ForYouWidget> {
                       width: double.infinity,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(7),
-                        child: Image.asset(
-                          "assets/images/desert.jpg",
+                        child: Image.network(
+                          widget.image,
                           fit: BoxFit.cover,
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace? stackTrace) {
+                            // Handle the error and provide an alternative widget or fallback image
+                            return Image.asset(
+                              'assets/images/${Images[Random().nextInt(Images.length)]}.jpg',
+                              fit: BoxFit.cover,
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -265,8 +304,8 @@ class _ForYouWidgetState extends State<ForYouWidget> {
                     Positioned(
                         bottom: 1,
                         child: Container(
-                          height: 60,
-                          width: 160,
+                          height: 70,
+                          width: MediaQuery.of(context).size.width,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -296,10 +335,11 @@ class _ForYouWidgetState extends State<ForYouWidget> {
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: GoogleFonts.quicksand(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w500,
-                                            // color: const Color.fromARGB(149, 255, 255, 255),
-                                          ),
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w800,
+                                              color: Colors.white
+                                              // color: const Color.fromARGB(149, 255, 255, 255),
+                                              ),
                                         ),
                                         const SizedBox(
                                           height: 3,
@@ -321,7 +361,7 @@ class _ForYouWidgetState extends State<ForYouWidget> {
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 1,
                                                 style: GoogleFonts.quicksand(
-                                                    fontSize: 12,
+                                                    fontSize: 15,
                                                     fontWeight: FontWeight.w500,
                                                     color: Color.fromARGB(
                                                         187, 255, 255, 255)),

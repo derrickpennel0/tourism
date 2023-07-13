@@ -1,8 +1,12 @@
 // NEW COMPONENT HEREEEE
 import 'package:first/components/InterestButtons.dart';
+import 'package:first/components/customInterestClipper1.dart';
+import 'package:first/components/customInterestClipper2.dart';
 import 'package:first/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../styles/app_style.dart';
 
 class InterestPage extends StatefulWidget {
   const InterestPage({Key? key}) : super(key: key);
@@ -69,8 +73,18 @@ class _InterestPageState extends State<InterestPage> {
         child: Center(
           child: Column(
             children: [
+              ClipPath(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 1,
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  // height: 200.0,
+                  color: Styles.brandLightShadeColor,
+                  // child: Text("Hey"),
+                ),
+                clipper: CustomInterestClipper1(),
+              ),
               Padding(
-                padding: EdgeInsets.only(top: 80.0, bottom: 20.0),
+                padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
                 child: Text.rich(
                   TextSpan(
                     text: "Tell us about your",
@@ -186,47 +200,43 @@ class _InterestPageState extends State<InterestPage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 110.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(width: 20.0),
-                    SizedBox(width: 20.0),
-                    OutlinedButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Home(),
-                            ));
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.black45),
-                        elevation: MaterialStateProperty.all(5.0),
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.all(10),
+                  padding: EdgeInsets.only(top: 30.0, right: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        child: Text(
+                          "Next",
+                          style: GoogleFonts.quicksand(
+                              fontSize: 16, fontWeight: FontWeight.w600),
                         ),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll(Colors.grey.shade800),
+                            minimumSize:
+                                MaterialStatePropertyAll(Size(90, 45))),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Home(),
+                              ));
+                        },
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Next",
-                            style: GoogleFonts.quicksand(
-                                fontSize: 20.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          // Expanded(child: SizedBox()),
-                          Icon(
-                            Icons.navigate_next,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  )),
+              Expanded(
+                child: ClipPath(
+                  child: Container(
+                    alignment: Alignment.bottomCenter,
+                    width: MediaQuery.of(context).size.width * 1,
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    // height: double.infinity,
+                    // height: 200.0,
+                    color: Styles.brandLightShadeColor,
+                    // child: Text("Hey"),
+                  ),
+                  clipper: customInterestClipper2(),
                 ),
               ),
             ],

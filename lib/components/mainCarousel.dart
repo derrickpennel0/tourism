@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,6 +19,15 @@ class _MainCarouselState extends State<MainCarousel> {
   //   'african.jpg',
   //   'test.png',
   // ];
+
+  List Images = [
+    'forest',
+    'lake',
+    'mountain',
+    'waterfalls',
+    'zoo',
+    'sanctuary'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +76,14 @@ class _MainCarouselState extends State<MainCarousel> {
                   child: Image.network(
                     '$image',
                     fit: BoxFit.cover,
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                      // Handle the error and provide an alternative widget or fallback image
+                      return Image.asset(
+                        'assets/images/${Images[Random().nextInt(Images.length)]}.jpg',
+                        fit: BoxFit.cover,
+                      );
+                    },
                   ),
                 );
               },

@@ -4,6 +4,7 @@ import 'package:first/components/autcomplete.dart';
 import 'package:first/components/map.dart';
 import 'package:first/screens/details.dart';
 import 'package:first/screens/home.dart';
+import 'package:first/screens/interest-page.dart';
 import 'package:first/screens/login.dart';
 import 'package:first/styles/app_style.dart';
 import 'package:flutter/material.dart';
@@ -48,9 +49,9 @@ void main() async {
         },
       },
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
-          scaffoldBackgroundColor: Styles.backgroundColor,
-          primaryColor: Colors.redAccent),
+      theme: ThemeData(
+        primaryColor: Colors.redAccent, // Set your custom primary color
+      ),
     ),
   );
 }

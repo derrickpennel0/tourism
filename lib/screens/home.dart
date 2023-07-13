@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:ui';
 // import 'dart:js_interop';
 
@@ -47,6 +48,14 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
+  List Images = [
+    'forest',
+    'lake',
+    'mountain',
+    'waterfalls',
+    'zoo',
+    'sanctuary'
+  ];
   void getUserData() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -91,71 +100,136 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
     super.initState();
     getUserData();
+    _body = bodies[0];
   }
 
+  var _body;
+  List bodies = [
+    Dashboard(),
+    Bookmarks(),
+  ];
+
+  var _selectedIndex = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     // final themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text(
-          FirebaseAuth.instance.currentUser != null ? '@${_username}' : '',
-          style: GoogleFonts.quicksand(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            // color: const Color.fromARGB(149, 255, 255, 255),
-          ),
-        ),
-        centerTitle: true,
-        elevation: 0,
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'logout') {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Logout'),
-                      content: Text('Are you sure you want to log out?'),
-                      actions: [
-                        TextButton(
-                          child: Text('Cancel'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        TextButton(
-                          child: Text('Logout'),
-                          onPressed: () {
-                            signOutUser();
-                            // Call the signOutUser function
-                            // Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              } else if (value == 'Sign in') {
-                Navigator.pushNamed(context, "/login");
-              }
-            },
-            itemBuilder: (BuildContext context) => [
-              FirebaseAuth.instance.currentUser != null
-                  ? PopupMenuItem<String>(
-                      value: 'logout',
-                      child: Text('Logout'),
-                    )
-                  : PopupMenuItem<String>(
-                      value: 'Sign in',
-                      child: Text('Sign in'),
-                    )
-            ],
-          ),
-        ],
-      ),
+      key: _scaffoldKey,
+      // appBar: AppBar(
+      //   leading: Container(
+      //       padding: EdgeInsets.all(9),
+      //       child: GestureDetector(
+      //         onTap: () {
+      //           _scaffoldKey.currentState?.openDrawer();
+      //         },
+      //         child: Container(
+      //           decoration: BoxDecoration(
+      //               borderRadius: BorderRadius.circular(7),
+      //               color: Colors.white,
+      //               boxShadow: [
+      //                 BoxShadow(
+      //                     color: Colors.white,
+      //                     offset: Offset(-2, -2),
+      //                     blurRadius: 5,
+      //                     spreadRadius: 12),
+      //                 BoxShadow(
+      //                     color: Color.fromARGB(255, 191, 191, 191),
+      //                     offset: Offset(2, 2),
+      //                     blurRadius: 5)
+      //               ]),
+      //           child: const Icon(
+      //             Icons.menu,
+      //             color: Colors.redAccent,
+      //             size: 20,
+      //           ),
+      //         ),
+      //       )),
+      //   backgroundColor: Colors.transparent,
+      //   title: Text(
+      //     FirebaseAuth.instance.currentUser != null ? '@${_username}' : '',
+      //     style: GoogleFonts.quicksand(
+      //         fontSize: 16,
+      //         fontWeight: FontWeight.w700,
+      //         color: Colors.grey.shade600
+      //         // how ago change the drawer menu nu?
+      //         ),
+      //   ),
+      //   centerTitle: true,
+      //   elevation: 0,
+      //   actions: [
+      // Container(
+      //   padding: EdgeInsets.all(7),
+      //   child: Container(
+      //     width: 40,
+      //     height: 40,
+      //     alignment: Alignment.center,
+      //     decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(7),
+      //         color: Colors.white,
+      //         boxShadow: [
+      //           BoxShadow(
+      //               color: Colors.white,
+      //               offset: Offset(-2, -2),
+      //               blurRadius: 5,
+      //               spreadRadius: 12),
+      //           BoxShadow(
+      //               color: Color.fromARGB(255, 191, 191, 191),
+      //               offset: Offset(2, 2),
+      //               blurRadius: 5)
+      //         ]),
+      //     child: PopupMenuButton<String>(
+      //       icon: Icon(
+      //         Icons.donut_small,
+      //         color: Colors.redAccent,
+      //       ),
+      //       onSelected: (value) {
+      //         if (value == 'logout') {
+      //           showDialog(
+      //             context: context,
+      //             builder: (BuildContext context) {
+      //               return AlertDialog(
+      //                 title: Text('Logout'),
+      //                 content: Text('Are you sure you want to log out?'),
+      //                 actions: [
+      //                   TextButton(
+      //                     child: Text('Cancel'),
+      //                     onPressed: () {
+      //                       Navigator.of(context).pop();
+      //                     },
+      //                   ),
+      //                   TextButton(
+      //                     child: Text('Logout'),
+      //                     onPressed: () {
+      //                       signOutUser();
+      //                       // Call the signOutUser function
+      //                       // Navigator.of(context).pop();
+      //                     },
+      //                   ),
+      //                 ],
+      //               );
+      //             },
+      //           );
+      //         } else if (value == 'Sign in') {
+      //           Navigator.pushNamed(context, "/login");
+      //         }
+      //       },
+      //       itemBuilder: (BuildContext context) => [
+      //         FirebaseAuth.instance.currentUser != null
+      //             ? PopupMenuItem<String>(
+      //                 value: 'logout',
+      //                 child: Text('Logout'),
+      //               )
+      //             : PopupMenuItem<String>(
+      //                 value: 'Sign in',
+      //                 child: Text('Sign in'),
+      //               )
+      //       ],
+      //     ),
+      //   ),
+      // ),
+      //   ],
+      // ),
       drawer: SafeArea(
         child: Drawer(
           width: MediaQuery.of(context).size.width * 0.7,
@@ -257,174 +331,46 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            children: [
-              Container(
-                  // padding: const EdgeInsets.symmetric(horizontal: 8),
-                  margin: const EdgeInsets.only(
-                    top: 20,
-                  ),
-                  height: 100,
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  child: MySearchScreen()),
-              // const SizedBox(
-              //   height: 10,
-              // ),
+      body: _body,
+      bottomNavigationBar: BottomNavigationBar(
+          selectedIconTheme: IconThemeData(color: Colors.redAccent),
+          selectedLabelStyle: MaterialStateTextStyle.resolveWith((states) {
+            if (states.contains(MaterialState.selected)) {
+              return TextStyle(color: Colors.red);
+            }
+            return TextStyle(color: Colors.black);
+          }),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Recommended',
-                    style: GoogleFonts.outfit(
-                      fontSize: 19,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey.shade200,
-                    ),
-                  ),
-                  InkWell(
-                    child: Row(
-                      children: [
-                        TextButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Explore(),
-                                ));
-                          },
-                          icon: Icon(
-                            Icons.play_arrow,
-                            color: Colors.white,
-                          ),
-                          label: Text('View more',
-                              style: GoogleFonts.quicksand(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              )),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-
-              const SizedBox(
-                height: 4,
-              ),
-              SizedBox(
-                  height: 210,
-                  child: FutureBuilder(
-                    future: forYou(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final List documents = snapshot.data.docs;
-                        return ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: documents.length,
-                            itemBuilder: (context, index) {
-                              final document = documents[index];
-                              print('${document['name']} , ghana');
-
-                              return ForYouWidget(
-                                  name: document['name'],
-                                  rating: document['rating'],
-                                  location: document['locationString']);
-                            });
-                      } else {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                    },
-                  )),
-
-              const SizedBox(
-                height: 5,
-              ),
-              Stack(
-                children: [
-                  Carousel(),
-                  Container(
-                    height: 250,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            Colors.black54.withOpacity(0.7),
-                            Colors.transparent
-                          ],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                            alignment: const Alignment(-1, 0),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Traveler's Choice Best \n of the Best Hotels",
-                                  style: GoogleFonts.outfit(
-                                      color: Colors.white,
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.w800),
-                                ),
-                                Text(
-                                  "Traveler's Choice Best of the Best Hotels",
-                                  style: GoogleFonts.outfit(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const FirstTimersPage(),
-                                        ));
-                                  },
-                                  style: ButtonStyle(
-                                      shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                      ),
-                                      minimumSize: MaterialStatePropertyAll(
-                                          Size(100, 45)),
-                                      backgroundColor: MaterialStatePropertyAll(
-                                          Colors.white)),
-                                  child: const Text(
-                                    "See List",
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                )
-                              ],
-                            ))
-                      ],
-                    ),
-                  )
-                ],
-              )
-            ]),
-      ),
-
+          // selectedLabelStyle: MaterialStateProperty.all(
+          //    TextStyle(color: Colors.red),
+          // ),
+          // TextStyle(color: Colors.red),
+          // GoogleFonts.quicksand(
+          //   fontSize: 13,
+          //   fontWeight: FontWeight.w900,
+          //   color: Colors.redAccent,
+          // ),
+          currentIndex: _selectedIndex,
+          onTap: (value) {
+            setState(() {
+              _selectedIndex = value;
+              _body = bodies[value];
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+              label: "Home",
+              icon: Icon(Icons.home_filled),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.bookmark),
+              label: "Bookmark",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ]),
       // const Image(image: AssetImage('assets/images/test.png'))
     );
   }
@@ -434,12 +380,14 @@ class ForYouWidget extends StatefulWidget {
   final String name;
   final String location;
   final String rating;
+  final String image;
 
   const ForYouWidget({
     super.key,
     required this.name,
     required this.location,
     required this.rating,
+    required this.image,
   });
 
   @override
@@ -565,6 +513,14 @@ class _ForYouWidgetState extends State<ForYouWidget> {
     checkBookmarkStatus();
   }
 
+  List Images = [
+    'forest',
+    'lake',
+    'mountain',
+    'waterfalls',
+    'zoo',
+    'sanctuary'
+  ];
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -593,11 +549,20 @@ class _ForYouWidgetState extends State<ForYouWidget> {
                   children: [
                     SizedBox(
                       width: double.infinity,
+                      height: double.infinity,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(7),
-                        child: Image.asset(
-                          "assets/images/desert.jpg",
+                        child: Image.network(
+                          widget.image,
                           fit: BoxFit.cover,
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace? stackTrace) {
+                            // Handle the error and provide an alternative widget or fallback image
+                            return Image.asset(
+                              'assets/images/${Images[Random().nextInt(Images.length)]}.jpg',
+                              fit: BoxFit.cover,
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -668,7 +633,7 @@ class _ForYouWidgetState extends State<ForYouWidget> {
                                           style: GoogleFonts.quicksand(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w500,
-                                            // color: const Color.fromARGB(149, 255, 255, 255),
+                                            color: Colors.grey.shade100,
                                           ),
                                         ),
                                         const SizedBox(
@@ -718,7 +683,9 @@ class _ForYouWidgetState extends State<ForYouWidget> {
                                           style: GoogleFonts.quicksand(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w700,
-                                            // color: const Color.fromARGB(149, 255, 255, 255),
+                                            color: Colors.grey.shade100,
+                                            // YOU SEE THE PAGE WAY YOU OPEN WAY THE IMAGES COME, USE THE BRANDMAINLIGHSHADE RATHER INSTEAD OF THE GREY AS BACJGROUND
+                                            // color: const Color.fromARGB(149, 255, 255, 255), Continue
                                           ),
                                         ),
                                       ],
@@ -782,6 +749,339 @@ class Categories extends StatelessWidget {
                   )),
             )
             .toList(),
+      ),
+    );
+  }
+}
+
+class Dashboard extends StatefulWidget {
+  const Dashboard({super.key});
+
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  void getUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userId = user.uid;
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      String? userName = snapshot.data()?['username'] as String?;
+      setState(() {
+        _username = userName;
+      });
+      print('User Name: $userName');
+    } else {}
+  }
+
+  String? _username;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserData();
+  }
+
+  Future forYou() async {
+    return FirebaseFirestore.instance.collection('sites').limit(3).get();
+  }
+
+  void signOutUser() async {
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      await auth.signOut();
+      // Redirect the user to the login screen or any other screen as needed
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginPage(),
+          ));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            children: [
+              Container(
+                height: 90,
+                padding: EdgeInsets.only(top: 25, bottom: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Welcome",
+                          style: GoogleFonts.outfit(
+                              fontSize: 27,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.grey.shade900
+                              // how ago change the drawer menu nu?
+                              ),
+                        ),
+                        Text(
+                          FirebaseAuth.instance.currentUser != null
+                              ? '@${_username}'
+                              : '',
+                          style: GoogleFonts.quicksand(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.grey.shade600
+                              // how ago change the drawer menu nu?
+                              ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(7),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.white,
+                                  offset: Offset(-2, -2),
+                                  blurRadius: 5,
+                                  spreadRadius: 12),
+                              BoxShadow(
+                                  color: Color.fromARGB(255, 191, 191, 191),
+                                  offset: Offset(2, 2),
+                                  blurRadius: 5)
+                            ]),
+                        child: PopupMenuButton<String>(
+                          icon: Icon(
+                            Icons.donut_small,
+                            color: Colors.redAccent,
+                          ),
+                          onSelected: (value) {
+                            if (value == 'logout') {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Logout'),
+                                    content: Text(
+                                        'Are you sure you want to log out?'),
+                                    actions: [
+                                      TextButton(
+                                        child: Text('Cancel'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text('Logout'),
+                                        onPressed: () {
+                                          signOutUser();
+                                          // Call the signOutUser function
+                                          // Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else if (value == 'Sign in') {
+                              Navigator.pushNamed(context, "/login");
+                            }
+                          },
+                          itemBuilder: (BuildContext context) => [
+                            FirebaseAuth.instance.currentUser != null
+                                ? PopupMenuItem<String>(
+                                    value: 'logout',
+                                    child: Text('Logout'),
+                                  )
+                                : PopupMenuItem<String>(
+                                    value: 'Sign in',
+                                    child: Text('Sign in'),
+                                  )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                  // padding: const EdgeInsets.symmetric(horizontal: 8),
+                  margin: const EdgeInsets.only(
+                    top: 20,
+                  ),
+                  height: 85,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: MySearchScreen()),
+              // const SizedBox(
+              //   height: 10,
+              // ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Recommended',
+                    style: GoogleFonts.outfit(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                  InkWell(
+                    child: Row(
+                      children: [
+                        TextButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Explore(),
+                                ));
+                          },
+                          icon: Icon(
+                            Icons.play_arrow,
+                            color: Colors.grey.shade900,
+                          ),
+                          label: Text('View more',
+                              style: GoogleFonts.quicksand(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.grey.shade600,
+                              )),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+
+              const SizedBox(
+                height: 4,
+              ),
+              SizedBox(
+                  height: 210,
+                  child: FutureBuilder(
+                    future: forYou(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final List documents = snapshot.data.docs;
+                        return ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: documents.length,
+                            itemBuilder: (context, index) {
+                              final document = documents[index];
+                              print('${document['name']} , ghana');
+
+                              return ForYouWidget(
+                                  image: document['images'][0],
+                                  name: document['name'],
+                                  rating: document['rating'],
+                                  location: document['locationString']);
+                            });
+                      } else {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  )),
+
+              const SizedBox(
+                height: 5,
+              ),
+              Stack(
+                children: [
+                  Carousel(),
+                  Container(
+                    height: 250,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [
+                            Colors.black54.withOpacity(0.7),
+                            Colors.transparent
+                          ],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                            alignment: const Alignment(-1, 0),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Traveler's Choice Best \n of the Best Hotels",
+                                  style: GoogleFonts.outfit(
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                                Text(
+                                  "Traveler's Choice Best of the Best Hotels",
+                                  style: GoogleFonts.outfit(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const FirstTimersPage(),
+                                        ));
+                                  },
+                                  style: ButtonStyle(
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                      ),
+                                      minimumSize: MaterialStatePropertyAll(
+                                          Size(100, 45)),
+                                      backgroundColor: MaterialStatePropertyAll(
+                                          Colors.white)),
+                                  child: const Text(
+                                    "See List",
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                )
+                              ],
+                            ))
+                      ],
+                    ),
+                  )
+                ],
+              )
+            ]),
       ),
     );
   }

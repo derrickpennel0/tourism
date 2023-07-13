@@ -11,10 +11,10 @@ import '../main.dart';
 import '../styles/app_style.dart';
 
 class Suggestion {
+  final String image;
   final String name;
-  final String photoUrl;
 
-  Suggestion({required this.name, required this.photoUrl});
+  Suggestion({required this.name, required this.image});
 }
 
 class MySearchScreen extends StatefulWidget {
@@ -97,7 +97,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
       child: Column(
         children: [
           Container(
-            height: 50,
+            height: 45,
             child: TypeAheadField(
               textFieldConfiguration: TextFieldConfiguration(
                 controller: _searchController,
@@ -105,7 +105,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
                   filled: true,
                   // focusColor: const Color.fromARGB(191, 23, 23, 23),
                   // iconColor: const Color.fromARGB(191, 23, 23, 23),
-                  fillColor: Styles.tileColor,
+                  fillColor: Colors.grey.shade300,
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                   hintStyle: GoogleFonts.quicksand(
@@ -166,16 +166,16 @@ class _MySearchScreenState extends State<MySearchScreen> {
                         );
                       },
                       icon: const Icon(Icons.filter_list_sharp)),
-                  enabledBorder: const OutlineInputBorder(
+                  enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: const Color.fromARGB(191, 23, 23, 23),
+                        color: Colors.grey.shade300,
                       ),
                       borderRadius: BorderRadius.all(
                         Radius.circular(15),
                       )),
-                  focusedBorder: const OutlineInputBorder(
+                  focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: const Color.fromARGB(191, 23, 23, 23),
+                        color: Colors.grey.shade300,
                       ),
                       borderRadius: BorderRadius.all(
                         Radius.circular(15),
@@ -196,7 +196,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
                 List<Suggestion> suggestions = matchingDocuments.map((doc) {
                   return Suggestion(
                     name: doc['name'].toString(),
-                    photoUrl: doc['photoUrl'].toString(),
+                    image: doc['images'][0].toString(),
                   );
                 }).toList();
                 return suggestions;
@@ -204,14 +204,14 @@ class _MySearchScreenState extends State<MySearchScreen> {
               itemBuilder: (context, suggestion) {
                 // print(suggestion.name);
                 return ListTile(
-                  leading: CircleAvatar(
-                    child: ClipOval(
-                      child: Image.network(
-                        suggestion.photoUrl.toString(),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+                  // leading: CircleAvatar(
+                  //   child: ClipOval(
+                  //     child: Image.network(
+                  //       suggestion.image.toString(),
+                  //       fit: BoxFit.cover,
+                  //     ),
+                  //   ),
+                  // ),
                   title: Text(suggestion.name.toString()),
                 );
               },
@@ -231,18 +231,18 @@ class _MySearchScreenState extends State<MySearchScreen> {
             height: 5,
           ),
           SizedBox(
-            height: 35,
+            height: 30,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 checkedItems.contains(true)
                     ? Text(
-                        "Filtered by : ${checkedItems.contains(true) ? '' : 'None'}",
+                        "Filtered by  ${checkedItems.contains(true) ? '' : 'None'}",
                         style: GoogleFonts.quicksand(
                           fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white60,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey.shade600,
                         ),
                       )
                     : SizedBox(),
@@ -255,8 +255,8 @@ class _MySearchScreenState extends State<MySearchScreen> {
                         return Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: const Color.fromARGB(
-                                191, 23, 23, 23), // Dark background color
+                            color: Color.fromARGB(
+                                189, 107, 107, 107), // Dark background color
                             borderRadius:
                                 BorderRadius.circular(7), // Rounded edges
                             border: Border.all(

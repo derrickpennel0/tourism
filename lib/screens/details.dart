@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/components/mainCarousel.dart';
@@ -39,6 +40,7 @@ class _DetailsState extends State<Details> {
     }
   }
 
+//this parrticualr page dey look raw too much adey come
   void bookmark() async {
     final userId = FirebaseAuth.instance.currentUser?.email;
     final site = widget.name;
@@ -132,6 +134,15 @@ class _DetailsState extends State<Details> {
   }
 
   List tabs = ['Overview', 'Reviews', 'Close Restaurants and Hotels'];
+  List Images = [
+    'forest',
+    'lake',
+    'mountain',
+    'waterfalls',
+    'zoo',
+    'sanctuary'
+  ];
+
   bool toggle = false;
   bool isInitial = true;
   @override
@@ -172,23 +183,18 @@ class _DetailsState extends State<Details> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Color.fromARGB(151, 197, 11, 11),
-                                  width: 2),
-                              borderRadius: BorderRadius.circular(100),
-                              color: Styles.tileColor,
+                              borderRadius: BorderRadius.circular(7),
+                              color: Colors.white,
                               boxShadow: [
                                 BoxShadow(
-                                    color: const Color.fromARGB(
-                                        255, 116, 116, 116),
-                                    spreadRadius: 2.5,
-                                    blurRadius: 0.7,
-                                    offset: Offset(1, 0.5)),
+                                    color: Colors.white,
+                                    offset: Offset(-2, -2),
+                                    blurRadius: 5,
+                                    spreadRadius: 12),
                                 BoxShadow(
-                                    color: Colors.black,
-                                    spreadRadius: 2.5,
-                                    blurRadius: 2,
-                                    offset: Offset(-1.5, -1))
+                                    color: Color.fromARGB(255, 191, 191, 191),
+                                    offset: Offset(2, 2),
+                                    blurRadius: 5)
                               ]),
                           child: const Icon(
                             Icons.arrow_back,
@@ -200,9 +206,10 @@ class _DetailsState extends State<Details> {
                   title: Text(
                     "Details",
                     style: GoogleFonts.quicksand(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: const Color.fromARGB(149, 255, 255, 255)),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey.shade600,
+                    ),
                   ),
                   centerTitle: true,
                   elevation: 0,
@@ -248,10 +255,10 @@ class _DetailsState extends State<Details> {
                     child: AspectRatio(
                       aspectRatio: 16 / 9,
                       child: Container(
-                          color: const Color.fromARGB(191, 23, 23, 23),
+                          // color: Colors.grey.shade300,
                           padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          // margin: EdgeInsets.only(bottom: 10),
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                          // margin: EdgeInsets.only(bottom: 10) HOT RELOAD DONT RESTART ELSE EGO GO THE INTEREST PAGE OH OKAY.. NOW THE OTHER GREY TOO YOU FOR TOUCH AM,
                           height: MediaQuery.of(context).size.height * 0.3,
                           child: Stack(
                             children: [
@@ -272,7 +279,10 @@ class _DetailsState extends State<Details> {
                                         Object exception,
                                         StackTrace? stackTrace) {
                                       // Handle the error and provide an alternative widget or fallback image
-                                      return Text('Failed to load image');
+                                      return Image.asset(
+                                        'assets/images/${Images[Random().nextInt(Images.length)]}.jpg',
+                                        fit: BoxFit.cover,
+                                      );
                                     },
                                   ),
                                 ),
@@ -304,8 +314,10 @@ class _DetailsState extends State<Details> {
                                                 Object exception,
                                                 StackTrace? stackTrace) {
                                               // Handle the error and provide an alternative widget or fallback image
-                                              return Text(
-                                                  'Failed to load image');
+                                              return Image.asset(
+                                                'assets/images/${Images[Random().nextInt(Images.length)]}.jpg',
+                                                fit: BoxFit.cover,
+                                              );
                                             },
                                           ),
                                         ),
@@ -324,8 +336,10 @@ class _DetailsState extends State<Details> {
                                                 Object exception,
                                                 StackTrace? stackTrace) {
                                               // Handle the error and provide an alternative widget or fallback image
-                                              return Text(
-                                                  'Failed to load image');
+                                              return Image.asset(
+                                                'assets/images/${Images[Random().nextInt(Images.length)]}.jpg',
+                                                fit: BoxFit.cover,
+                                              );
                                             },
                                           ),
                                         ),
@@ -398,10 +412,23 @@ class _DetailsState extends State<Details> {
                       children: [
                         Container(
                           // width: double.infinity,
-                          // height: double.infinity,
+                          // height: double.infinity, we for use diff color .. ,,yeah ..but what do you hvae in mind? unlessyeah
                           padding: EdgeInsets.only(
                               bottom: 1, top: 3, left: 12, right: 12),
-                          color: const Color.fromARGB(191, 23, 23, 23),
+                          // color: Colors.grey.shade300,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(5),
+                                  bottomRight: Radius.circular(5)),
+                              // how it dey look for your side  oh ebi cool then vim we mive but the reviews text as in the unactive once if we use the redAccent it go be off? yeah yeah
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey.shade300,
+                                    blurRadius: 5,
+                                    offset: Offset(0, 9))
+                              ]),
+
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -422,9 +449,8 @@ class _DetailsState extends State<Details> {
                                           maxLines: 1,
                                           style: GoogleFonts.quicksand(
                                               fontSize: 22,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color.fromARGB(
-                                                  243, 255, 255, 255)),
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.grey.shade600),
                                         ),
                                         Row(
                                           children: [
@@ -441,14 +467,14 @@ class _DetailsState extends State<Details> {
                                               style: GoogleFonts.quicksand(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w500,
-                                                  color: Color.fromARGB(
-                                                      187, 255, 255, 255)),
+                                                  color: Colors.grey.shade600),
                                             ),
                                           ],
                                         )
                                       ],
                                     ),
                                   ),
+//ano dey see what you dey talk tho but make i fix this thing
                                   Container(
                                     // width: MediaQuery.of(context).size.width *
                                     //     0.30,
@@ -472,9 +498,8 @@ class _DetailsState extends State<Details> {
                                               '${rating}',
                                               style: GoogleFonts.quicksand(
                                                   fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Color.fromARGB(
-                                                      187, 255, 255, 255)),
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Colors.redAccent),
                                             ),
                                           ],
                                         ),
@@ -494,8 +519,7 @@ class _DetailsState extends State<Details> {
                                               style: GoogleFonts.quicksand(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w500,
-                                                  color: Color.fromARGB(
-                                                      187, 255, 255, 255)),
+                                                  color: Colors.grey.shade600),
                                             ),
                                           ],
                                         )
@@ -507,7 +531,7 @@ class _DetailsState extends State<Details> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              SizedBox(
+                              Container(
                                 width: MediaQuery.of(context).size.width,
                                 height: 20,
                                 child: ListView.separated(
@@ -527,10 +551,10 @@ class _DetailsState extends State<Details> {
                                           tabs[index],
                                           style: GoogleFonts.quicksand(
                                               fontSize: 15,
-                                              fontWeight: FontWeight.w400,
+                                              fontWeight: FontWeight.w600,
                                               color: tab != index
                                                   ? Colors.grey.shade500
-                                                  : Colors.redAccent),
+                                                  : Colors.blue),
                                         ),
                                       ),
                                     );
@@ -541,8 +565,8 @@ class _DetailsState extends State<Details> {
                                       margin:
                                           EdgeInsets.symmetric(horizontal: 12),
                                       width: 1, // Width of the vertical line
-                                      color: Colors
-                                          .white, // Color of the vertical line
+                                      color: Colors.grey
+                                          .shade500, // Color of the vertical line
                                     );
                                   },
                                 ),
@@ -625,15 +649,17 @@ class _DetailsState extends State<Details> {
                                                   padding:
                                                       const EdgeInsets.all(2.0),
                                                   child: ListTile(
-                                                      tileColor: Color.fromARGB(
-                                                          192, 13, 13, 13),
+                                                      tileColor:
+                                                          Colors.grey.shade300,
                                                       title:
                                                           Text(doc['content']),
                                                       subtitle: Text(
                                                         doc['author'],
                                                         style: GoogleFonts
                                                             .quicksand(
-                                                                fontSize: 12),
+                                                                fontSize: 12,
+                                                                color: Colors
+                                                                    .redAccent),
                                                       ),
                                                       trailing: FirebaseAuth
                                                                   .instance
@@ -675,11 +701,9 @@ class _DetailsState extends State<Details> {
                                         ? Text(
                                             description,
                                             style: GoogleFonts.quicksand(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color.fromARGB(
-                                                  187, 255, 255, 255),
-                                            ),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.grey.shade600),
                                           )
                                         : SizedBox(
                                             height: MediaQuery.of(context)
@@ -694,6 +718,7 @@ class _DetailsState extends State<Details> {
                                                 rating: "3.4",
                                                 name: "ghana",
                                                 location: "Volta",
+                                                image: "http:ghahahgh",
                                               ),
                                             ),
                                           ),
@@ -757,17 +782,21 @@ class _DetailsState extends State<Details> {
                                                     controller:
                                                         reviewController,
                                                     decoration: InputDecoration(
-                                                        enabledBorder: OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                    7),
-                                                            borderSide: BorderSide(
-                                                                color: const Color.fromARGB(
-                                                                    191, 23, 23, 23))),
-                                                        border: UnderlineInputBorder(
-                                                            borderSide:
-                                                                BorderSide
-                                                                    .none),
+                                                        enabledBorder:
+                                                            OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            7),
+                                                                borderSide: BorderSide(
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .shade300)),
+                                                        border:
+                                                            UnderlineInputBorder(
+                                                                borderSide:
+                                                                    BorderSide
+                                                                        .none),
                                                         hintText:
                                                             "Leave a review ...",
                                                         hintStyle:
@@ -776,11 +805,11 @@ class _DetailsState extends State<Details> {
                                                                     .grey
                                                                     .shade600,
                                                                 fontSize: 14),
-                                                        fillColor:
-                                                            const Color.fromARGB(
-                                                                191, 23, 23, 23),
+                                                        fillColor: Colors
+                                                            .grey.shade300,
                                                         filled: true),
                                                     style: TextStyle(),
+                                                    //adey prefer filled with white color and the border can be a grey and text can also be
                                                   ),
                                                 ),
                                               ),

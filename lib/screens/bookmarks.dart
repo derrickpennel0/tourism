@@ -35,36 +35,6 @@ class Bookmarks extends StatelessWidget {
             print(snapshot.data.toString());
             final data = snapshot.data as List;
             return Scaffold(
-              appBar: AppBar(
-                leading: Container(
-                    padding: EdgeInsets.all(12),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7),
-                          color: Colors.white.withOpacity(0.8),
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.redAccent,
-                          size: 20,
-                        ),
-                      ),
-                    )),
-                title: Text(
-                  "Bookmarks",
-                  style: GoogleFonts.quicksand(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: const Color.fromARGB(149, 255, 255, 255)),
-                ),
-                centerTitle: true,
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-              ),
               body: data.length > 0
                   ? ListView.builder(
                       itemCount: data.length,

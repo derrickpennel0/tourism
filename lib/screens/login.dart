@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/components/customClipper.dart';
 import 'package:first/screens/home.dart';
+import 'package:first/styles/app_style.dart';
 import 'package:flutter/gestures.dart';
 
 // import 'package:first/screens/register.dart';
@@ -140,6 +142,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _screenSize = MediaQuery.of(context).size;
+
     return Form(
       key: _formKey,
       child: SafeArea(
@@ -149,30 +153,16 @@ class _LoginPageState extends State<LoginPage> {
             elevation: 0,
             backgroundColor: Colors.transparent,
           ),
+
           extendBodyBehindAppBar: true,
           body: Stack(
             children: [
               Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  // decoration: const BoxDecoration(
-                  //   image: DecorationImage(
-                  //       image: AssetImage("assets/images/myPlane.jpg"),
-                  //       fit: BoxFit.cover),
-                  // ),
-                  child: Image.asset(
-                    "assets/images/back.jpeg",
-                    fit: BoxFit.fitHeight,
-                  )),
-
-              Container(
                 decoration: const BoxDecoration(
                   // color: Color.fromRGBO(255, 255, 255, 0.3),
                   // color: Colors.black12,
-                  gradient: LinearGradient(colors: [
-                    Colors.black87,
-                    Colors.transparent,
-                  ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
+                  // color: Colors.black,
+                  color: Colors.white,
 
                   // color: Colors.black,
                   // borderRadius:
@@ -181,19 +171,37 @@ class _LoginPageState extends State<LoginPage> {
               ),
 
               Container(
-                padding: EdgeInsets.only(top: 50.0),
+                // padding: EdgeInsets.only(top: 50.0),
                 child: SingleChildScrollView(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Center(
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          backgroundImage:
-                              AssetImage("assets/images/new-app-logo.png"),
-                          radius: 30,
+                      ClipPath(
+                        child: Container(
+                          width: _screenSize.width * 1,
+                          height: _screenSize.height * 0.2,
+                          // height: 200.0,
+                          color: Styles.brandLightShadeColor,
+                          // child: Text("Hey"),
                         ),
+                        clipper: MyCustomClipper(),
                       ),
+
+                      Container(
+                        // padding: EdgeInsets.only(top: 20.0),
+                        child: Image.asset("assets/images/sign-in-icon.png"),
+                        width: _screenSize.width * 0.5,
+                        height: _screenSize.height * 0.2,
+                      ),
+
+                      // Center(
+                      //   child: CircleAvatar(
+                      //     backgroundColor: Colors.white,
+                      //     backgroundImage:
+                      //         AssetImage("assets/images/new-app-logo.png"),
+                      //     radius: 30,
+                      //   ),
+                      // ),
                       Center(
                         child: Column(
                           // mainAxisAlignment: MainAxisAlignment.start,
@@ -207,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                                 style: GoogleFonts.quicksand(
                                   fontSize: 32.0,
                                   fontWeight: FontWeight.w800,
-                                  color: Colors.white,
+                                  color: Styles.supportingTextDeepShadeColor,
                                 ),
                               ),
                             ),
@@ -219,19 +227,19 @@ class _LoginPageState extends State<LoginPage> {
                                 style: GoogleFonts.quicksand(
                                   fontSize: 15.0,
                                   fontWeight: FontWeight.w700,
-                                  color: Colors.white,
+                                  color: Styles.supportingTextMainShadeColor,
                                 ),
                               ),
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10.0, top: 10.0),
+                              padding: const EdgeInsets.only(
+                                  left: 10.0, top: 10.0, bottom: 10.0),
                               child: Text(
                                 "Sign in and start your trip with us",
                                 style: GoogleFonts.quicksand(
                                   fontSize: 15.0,
                                   fontWeight: FontWeight.w700,
-                                  color: Colors.white,
+                                  color: Colors.grey,
                                 ),
                               ),
                             ),
@@ -240,18 +248,32 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 10.0),
+                            horizontal: 20.0, vertical: 12.0),
                         child: TextFormField(
-                          style: GoogleFonts.quicksand(color: Colors.white),
+                          style: GoogleFonts.quicksand(
+                              color: Styles.supportingTextDeepShadeColor),
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
+                            filled: true,
+                            focusColor: Styles.brandDeepShadeColor,
+                            // fillColor: Color.fromARGB(255, 237, 232, 232),
+                            fillColor: Colors.grey.shade300,
+
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color:
+                                        Styles.supportingTextDeepShadeColor)),
                             labelText: 'Email',
-                            hintText: 'Enter your email',
+                            // hintText: 'Enter your email',
+                            // hintStyle: TextStyle(
+                            //     color: Styles.supportingTextDeepShadeColor),
                             enabled: true,
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white)),
-                            labelStyle: const TextStyle(color: Colors.white),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color:
+                                        Styles.supportingTextLightShadeColor)),
+                            labelStyle: const TextStyle(color: Colors.black54),
                           ),
                           validator: _validateEmail,
                           onChanged: (value) {
@@ -312,7 +334,8 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20.0, vertical: 10.0),
                         child: TextFormField(
-                          style: GoogleFonts.quicksand(color: Colors.white),
+                          style: GoogleFonts.quicksand(
+                              color: Styles.supportingTextDeepShadeColor),
                           controller: _password,
                           validator: (value) {
                             if (value == "" || value!.isEmpty) {
@@ -325,10 +348,21 @@ class _LoginPageState extends State<LoginPage> {
                           keyboardType: TextInputType.visiblePassword,
                           onTap: () {},
                           decoration: InputDecoration(
+                            filled: true,
+                            focusColor: Styles.brandDeepShadeColor,
+                            // fillColor: Color.fromARGB(255, 237, 232, 232),
+                            fillColor: Colors.grey.shade300,
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color:
+                                        Styles.supportingTextDeepShadeColor)),
                             enabled: true,
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white)),
-                            labelStyle: const TextStyle(color: Colors.white),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color:
+                                        Styles.supportingTextLightShadeColor)),
+                            labelStyle: const TextStyle(color: Colors.black54),
+
                             // label: Text("HEy"),
                             labelText: "Password",
                             suffixIcon: GestureDetector(
@@ -342,8 +376,8 @@ class _LoginPageState extends State<LoginPage> {
                                       ? Icons.visibility_off
                                       : Icons.visibility,
                                   color: _visibile
-                                      ? Colors.white
-                                      : Colors.redAccent,
+                                      ? Styles.supportingTextDeepShadeColor
+                                      : Styles.brandMainColor,
                                 )),
                             // Icon(Icons.visibility)
                           ),
@@ -355,11 +389,11 @@ class _LoginPageState extends State<LoginPage> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal:
-                                  50.0), // Add padding to the left and right sides
+                                  20.0), // Add padding to the left and right sides
                           width: double.infinity,
                           // alignment: AlignmentDirectional.center,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 30.0),
+                            padding: const EdgeInsets.only(top: 10.0),
                             child: OutlinedButton(
                                 onHover: (value) {
                                   setState(() {
@@ -367,6 +401,9 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                 },
                                 style: ButtonStyle(
+                                  padding:
+                                      MaterialStateProperty.all<EdgeInsets>(
+                                          EdgeInsets.all(10.0)),
                                   foregroundColor:
                                       MaterialStateProperty.all<Color>(
                                           Colors.white),
@@ -374,7 +411,7 @@ class _LoginPageState extends State<LoginPage> {
                                       MaterialStateProperty.all<Color>(
                                           _hoverColor
                                               ? Colors.red.shade100
-                                              : Colors.redAccent),
+                                              : Styles.brandMainColor),
                                 ),
                                 onPressed: _submitForm,
                                 child: const Padding(
@@ -388,7 +425,9 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text.rich(
                           TextSpan(
                               text: "Don't have an account?",
-                              style: GoogleFonts.quicksand(color: Colors.white),
+                              style: GoogleFonts.quicksand(
+                                color: Colors.grey,
+                              ),
                               children: [
                                 WidgetSpan(
                                   child: SizedBox(width: 5),
@@ -397,9 +436,9 @@ class _LoginPageState extends State<LoginPage> {
                                 TextSpan(
                                   text: "Click here",
                                   style: GoogleFonts.quicksand(
-                                    color: Colors.redAccent,
+                                    color: Styles.brandMainColor,
                                     decoration: TextDecoration.underline,
-                                    decorationColor: Colors.redAccent,
+                                    decorationColor: Styles.brandMainColor,
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {

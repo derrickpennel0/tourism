@@ -62,12 +62,18 @@ class Bookmarks extends StatelessWidget {
                                 subtitle: data[index]['location'].toString())),
                       )
                     : Center(
-                        child: Text(
-                          "Oops :( You have no bookmarks",
-                          style: GoogleFonts.quicksand(
-                              color: Colors.redAccent,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset("assets/images/images.png"),
+                            Text(
+                              "Oops!! You have no bookmarks",
+                              style: GoogleFonts.quicksand(
+                                  color: Colors.redAccent,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
                         ),
                       ),
               ),

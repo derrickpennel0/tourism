@@ -75,16 +75,15 @@ class _FirstTimersPageState extends State<FirstTimersPage> {
             ),
           ),
         ),
-        const Overlay(),
+        Overlay(pageNumber: pageNumber),
       ])),
     );
   }
 }
 
 class Overlay extends StatefulWidget {
-  const Overlay({
-    super.key,
-  });
+  final pageNumber;
+  Overlay({super.key, required this.pageNumber});
 
   @override
   State<Overlay> createState() => _OverlayState();

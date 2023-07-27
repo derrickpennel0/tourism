@@ -362,16 +362,12 @@ class _ForYouWidgetState extends State<ForYouWidget> {
 
         if (data.containsKey('bookmarks')) {
           List<dynamic> sites = data['bookmarks'];
-          bool isBookmarkExists(String name, String location) {
-            for (var bookmark in sites) {
-              if (bookmark.name == name && bookmark.location == location) {
-                return true;
-              }
-            }
-            return false;
+          bool isBookmarkPresent(String name, String location) {
+            return sites.any((bookmark) =>
+                bookmark['name'] == name && bookmark['location'] == location);
           }
 
-          if (isBookmarkExists(widget.name, widget.location)) {
+          if (isBookmarkPresent(widget.name, widget.location)) {
             setState(() {
               toggle = true;
             });
@@ -415,9 +411,6 @@ class _ForYouWidgetState extends State<ForYouWidget> {
         bool bookmarkExists = false;
         for (var bookmark in bookmarksArray) {
           if (bookmark['name'] == name && bookmark['location'] == location) {
-            setState(() {
-              toggle = true;
-            });
             bookmarkExists = true;
             break;
           }
@@ -425,9 +418,15 @@ class _ForYouWidgetState extends State<ForYouWidget> {
 
         // If the bookmark exists, remove it; otherwise, add it to the array
         if (bookmarkExists) {
+          setState(() {
+            toggle = false;
+          });
           bookmarksArray.removeWhere((bookmark) =>
               bookmark['name'] == name && bookmark['location'] == location);
         } else {
+          setState(() {
+            toggle = true;
+          });
           bookmarksArray.add({'name': name, 'location': location});
         }
       }

@@ -11,9 +11,11 @@ import 'package:first/screens/bookmarks.dart';
 import 'package:first/screens/details.dart';
 import 'package:first/screens/explore.dart';
 import 'package:first/screens/first_timers_page.dart';
+import 'package:first/screens/profile.dart';
 import 'package:first/styles/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import '../components/myDrawerListTile.dart';
 import './login.dart';
 import 'package:http/http.dart' as http;
@@ -104,10 +106,7 @@ class _HomeState extends State<Home> {
   }
 
   var _body;
-  List bodies = [
-    Dashboard(),
-    Bookmarks(),
-  ];
+  List bodies = [Dashboard(), Bookmarks(), ProfilePage()];
 
   var _selectedIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -116,120 +115,7 @@ class _HomeState extends State<Home> {
     // final themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
       key: _scaffoldKey,
-      // appBar: AppBar(
-      //   leading: Container(
-      //       padding: EdgeInsets.all(9),
-      //       child: GestureDetector(
-      //         onTap: () {
-      //           _scaffoldKey.currentState?.openDrawer();
-      //         },
-      //         child: Container(
-      //           decoration: BoxDecoration(
-      //               borderRadius: BorderRadius.circular(7),
-      //               color: Colors.white,
-      //               boxShadow: [
-      //                 BoxShadow(
-      //                     color: Colors.white,
-      //                     offset: Offset(-2, -2),
-      //                     blurRadius: 5,
-      //                     spreadRadius: 12),
-      //                 BoxShadow(
-      //                     color: Color.fromARGB(255, 191, 191, 191),
-      //                     offset: Offset(2, 2),
-      //                     blurRadius: 5)
-      //               ]),
-      //           child: const Icon(
-      //             Icons.menu,
-      //             color: Colors.redAccent,
-      //             size: 20,
-      //           ),
-      //         ),
-      //       )),
-      //   backgroundColor: Colors.transparent,
-      //   title: Text(
-      //     FirebaseAuth.instance.currentUser != null ? '@${_username}' : '',
-      //     style: GoogleFonts.quicksand(
-      //         fontSize: 16,
-      //         fontWeight: FontWeight.w700,
-      //         color: Colors.grey.shade600
-      //         // how ago change the drawer menu nu?
-      //         ),
-      //   ),
-      //   centerTitle: true,
-      //   elevation: 0,
-      //   actions: [
-      // Container(
-      //   padding: EdgeInsets.all(7),
-      //   child: Container(
-      //     width: 40,
-      //     height: 40,
-      //     alignment: Alignment.center,
-      //     decoration: BoxDecoration(
-      //         borderRadius: BorderRadius.circular(7),
-      //         color: Colors.white,
-      //         boxShadow: [
-      //           BoxShadow(
-      //               color: Colors.white,
-      //               offset: Offset(-2, -2),
-      //               blurRadius: 5,
-      //               spreadRadius: 12),
-      //           BoxShadow(
-      //               color: Color.fromARGB(255, 191, 191, 191),
-      //               offset: Offset(2, 2),
-      //               blurRadius: 5)
-      //         ]),
-      //     child: PopupMenuButton<String>(
-      //       icon: Icon(
-      //         Icons.donut_small,
-      //         color: Colors.redAccent,
-      //       ),
-      //       onSelected: (value) {
-      //         if (value == 'logout') {
-      //           showDialog(
-      //             context: context,
-      //             builder: (BuildContext context) {
-      //               return AlertDialog(
-      //                 title: Text('Logout'),
-      //                 content: Text('Are you sure you want to log out?'),
-      //                 actions: [
-      //                   TextButton(
-      //                     child: Text('Cancel'),
-      //                     onPressed: () {
-      //                       Navigator.of(context).pop();
-      //                     },
-      //                   ),
-      //                   TextButton(
-      //                     child: Text('Logout'),
-      //                     onPressed: () {
-      //                       signOutUser();
-      //                       // Call the signOutUser function
-      //                       // Navigator.of(context).pop();
-      //                     },
-      //                   ),
-      //                 ],
-      //               );
-      //             },
-      //           );
-      //         } else if (value == 'Sign in') {
-      //           Navigator.pushNamed(context, "/login");
-      //         }
-      //       },
-      //       itemBuilder: (BuildContext context) => [
-      //         FirebaseAuth.instance.currentUser != null
-      //             ? PopupMenuItem<String>(
-      //                 value: 'logout',
-      //                 child: Text('Logout'),
-      //               )
-      //             : PopupMenuItem<String>(
-      //                 value: 'Sign in',
-      //                 child: Text('Sign in'),
-      //               )
-      //       ],
-      //     ),
-      //   ),
-      // ),
-      //   ],
-      // ),
+
       drawer: SafeArea(
         child: Drawer(
           width: MediaQuery.of(context).size.width * 0.7,
@@ -332,45 +218,103 @@ class _HomeState extends State<Home> {
         ),
       ),
       body: _body,
-      bottomNavigationBar: BottomNavigationBar(
-          selectedIconTheme: IconThemeData(color: Colors.redAccent),
-          selectedLabelStyle: MaterialStateTextStyle.resolveWith((states) {
-            if (states.contains(MaterialState.selected)) {
-              return TextStyle(color: Colors.red);
-            }
-            return TextStyle(color: Colors.black);
-          }),
 
-          // selectedLabelStyle: MaterialStateProperty.all(
-          //    TextStyle(color: Colors.red),
-          // ),
-          // TextStyle(color: Colors.red),
-          // GoogleFonts.quicksand(
-          //   fontSize: 13,
-          //   fontWeight: FontWeight.w900,
-          //   color: Colors.redAccent,
-          // ),
-          currentIndex: _selectedIndex,
-          onTap: (value) {
+      bottomNavigationBar: GNav(
+          rippleColor: Colors.grey, // tab button ripple color when pressed
+          hoverColor: Colors.grey, // tab button hover color
+          haptic: true, // haptic feedback
+          tabBorderRadius: 30,
+          tabMargin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+          // backgroundColor: Colors.redAccent,
+          tabActiveBorder: Border.all(
+              color: Colors.transparent, width: 1), // tab button border
+          tabBorder: Border.all(
+              color: Colors.transparent, width: 0), // tab button border
+          tabShadow: [
+            // BoxShadow(color: Colors.grey.withOpacity(0.5), blurRadius: 8)
+          ], // tab button shadow
+          curve: Curves.easeInOut, // tab animation curves
+          // duration: Duration(milliseconds: 100), // tab animation duration
+          gap: 8, // the tab button gap between icon and text
+          color: Colors.grey[800], // unselected icon color
+          activeColor: Colors.grey.shade800,
+          tabBackgroundGradient: LinearGradient(
+              colors: [
+                Colors.grey.shade500,
+                Colors.grey.shade300
+                // Colors.transparent,
+              ],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight), // selected icon and text color
+          iconSize: 30, // tab button icon size
+          // tabBackgroundColor: Colors.grey.shade300,
+          textStyle: GoogleFonts.quicksand(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey.shade800),
+          // selected tab background color
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+          onTabChange: (value) {
             setState(() {
               _selectedIndex = value;
               _body = bodies[value];
             });
           },
-          items: [
-            BottomNavigationBarItem(
-              label: "Home",
-              icon: Icon(Icons.home_filled),
+          selectedIndex: _selectedIndex,
+          // navigation bar padding
+          tabs: [
+            GButton(
+              icon: Icons.home_outlined,
+              text: 'Home',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark),
-              label: "Bookmark",
+            GButton(
+              icon: Icons.bookmark_outline,
+              text: 'Bookmarks',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
+            GButton(
+              icon: Icons.person_outline,
+              text: 'Profile',
             ),
           ]),
+      // bottomNavigationBar: BottomNavigationBar(
+      //     selectedIconTheme: IconThemeData(color: Colors.redAccent),
+      //     selectedLabelStyle: MaterialStateTextStyle.resolveWith((states) {
+      //       if (states.contains(MaterialState.selected)) {
+      //         return TextStyle(color: Colors.red);
+      //       }
+      //       return TextStyle(color: Colors.black);
+      //     }),
+
+      //     // selectedLabelStyle: MaterialStateProperty.all(
+      //     //    TextStyle(color: Colors.red),
+      //     // ),
+      //     // TextStyle(color: Colors.red),
+      //     // GoogleFonts.quicksand(
+      //     //   fontSize: 13,
+      //     //   fontWeight: FontWeight.w900,
+      //     //   color: Colors.redAccent,
+      //     // ),
+      //     currentIndex: _selectedIndex,
+      //     onTap: (value) {
+      //       setState(() {
+      //         _selectedIndex = value;
+      //         _body = bodies[value];
+      //       });
+      //     },
+      //     items: [
+      //       BottomNavigationBarItem(
+      //         label: "Home",
+      //         icon: Icon(Icons.home_filled),
+      //       ),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.bookmark),
+      //         label: "Bookmark",
+      //       ),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.person),
+      //         label: 'Profile',
+      //       ),
+      //     ]),
       // const Image(image: AssetImage('assets/images/test.png'))
     );
   }
@@ -405,7 +349,7 @@ class _ForYouWidgetState extends State<ForYouWidget> {
   void checkBookmarkStatus() async {
     if (FirebaseAuth.instance.currentUser != null) {
       final userId = FirebaseAuth.instance.currentUser?.email;
-      final site = widget.name;
+      final site = {'name': widget.name, 'location': widget.location};
       final CollectionReference collectionRef =
           FirebaseFirestore.instance.collection('users');
 
@@ -418,8 +362,16 @@ class _ForYouWidgetState extends State<ForYouWidget> {
 
         if (data.containsKey('bookmarks')) {
           List<dynamic> sites = data['bookmarks'];
+          bool isBookmarkExists(String name, String location) {
+            for (var bookmark in sites) {
+              if (bookmark.name == name && bookmark.location == location) {
+                return true;
+              }
+            }
+            return false;
+          }
 
-          if (sites.contains(site)) {
+          if (isBookmarkExists(widget.name, widget.location)) {
             setState(() {
               toggle = true;
             });
@@ -433,80 +385,150 @@ class _ForYouWidgetState extends State<ForYouWidget> {
     }
   }
 
-  void bookmark() async {
-    if (FirebaseAuth.instance.currentUser != null) {
-      final userId = FirebaseAuth.instance.currentUser?.email;
-      final site = widget.name;
-      final CollectionReference collectionRef =
-          FirebaseFirestore.instance.collection('users');
-
-      final QuerySnapshot querySnapshot =
-          await collectionRef.where('email', isEqualTo: userId).get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        final DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
-        final DocumentReference documentRef = FirebaseFirestore.instance
-            .collection('users')
-            .doc(documentSnapshot.reference.id);
-
-        await FirebaseFirestore.instance.runTransaction((transaction) async {
-          final DocumentSnapshot snapshot = await transaction.get(documentRef);
-          final data = snapshot.data() as Map<String,
-              dynamic>; // Explicitly cast to Map<String, dynamic>
-
-          if (snapshot.exists) {
-            final List<dynamic> bookmarks = data['bookmarks'] ?? [];
-
-            if (bookmarks.contains(site)) {
-              bookmarks.remove(site);
-              setState(() {
-                toggle = false;
-              });
-            } else {
-              bookmarks.add(site);
-              setState(() {
-                toggle = true;
-              });
-            }
-
-            transaction.update(documentRef, {'bookmarks': bookmarks});
-          } else {
-            transaction.set(documentRef, {
-              'bookmarks': [site]
-            });
-          }
-        });
+  Future<void> bookmark(String name, String location) async {
+    try {
+      // Get the current logged-in user
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        print('No user is logged in.');
+        return;
       }
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Logout'),
-            content: Text('Kindly sign into your accont'),
-            actions: [
-              TextButton(
-                child: Text('Cancel'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text('Log in'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.pushNamed(context, "/login");
 
-                  // signOutUser();
-                  // Call the signOutUser function
-                },
-              ),
-            ],
-          );
-        },
-      );
+      // Get a reference to the user's document in Firestore
+      DocumentReference<Map<String, dynamic>> userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+      // Get the user's document snapshot
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await userDocRef.get();
+
+      // Get the current bookmarks array
+      List<dynamic>? bookmarksArray = userSnapshot.data()?['bookmarks'];
+
+      if (bookmarksArray == null) {
+        // If the bookmarks array doesn't exist, create a new one with the first bookmark
+        bookmarksArray = [
+          {'name': name, 'location': location},
+        ];
+      } else {
+        // Check if the bookmark already exists in the array
+        bool bookmarkExists = false;
+        for (var bookmark in bookmarksArray) {
+          if (bookmark['name'] == name && bookmark['location'] == location) {
+            setState(() {
+              toggle = true;
+            });
+            bookmarkExists = true;
+            break;
+          }
+        }
+
+        // If the bookmark exists, remove it; otherwise, add it to the array
+        if (bookmarkExists) {
+          bookmarksArray.removeWhere((bookmark) =>
+              bookmark['name'] == name && bookmark['location'] == location);
+        } else {
+          bookmarksArray.add({'name': name, 'location': location});
+        }
+      }
+
+      // Update the bookmarks array in Firestore
+      await userDocRef.update({'bookmarks': bookmarksArray});
+
+      print('Bookmarking/unbookmarking successful.');
+    } catch (e) {
+      print('Error bookmarking/unbookmarking: $e');
     }
   }
+
+  // void bookmark() async {
+  //   if (FirebaseAuth.instance.currentUser != null) {
+  //     final userId = FirebaseAuth.instance.currentUser?.email;
+  //     final site = widget.name;
+  //     final CollectionReference collectionRef =
+  //         FirebaseFirestore.instance.collection('users');
+
+  //     final QuerySnapshot querySnapshot =
+  //         await collectionRef.where('email', isEqualTo: userId).get();
+
+  //     if (querySnapshot.docs.isNotEmpty) {
+  //       final DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
+  //       final DocumentReference documentRef = FirebaseFirestore.instance
+  //           .collection('users')
+  //           .doc(documentSnapshot.reference.id);
+
+  //       await FirebaseFirestore.instance.runTransaction((transaction) async {
+  //         final DocumentSnapshot snapshot = await transaction.get(documentRef);
+  //         final data = snapshot.data() as Map<String, dynamic>;
+
+  //         if (snapshot.exists) {
+  //           final List<dynamic> bookmarks = data['bookmarks'] ?? [];
+  //           bool isBookmarkExists(String name, String location) {
+  //             for (var bookmark in bookmarks) {
+  //               if (bookmark.name) {
+  //                 return true;
+  //               }
+  //             }
+  //             return false;
+  //           }
+
+  //           if (isBookmarkExists(widget.name, widget.location)) {
+  //             bookmarks
+  //                 .removeWhere((bookmark) => bookmark['name'] == widget.name);
+  //             setState(() {
+  //               toggle = false;
+  //             });
+  //           } else {
+  //             bookmarks.add({
+  //               'name': widget.name,
+  //               'location': widget.location,
+  //               'image': widget.image
+  //             });
+  //             setState(() {
+  //               toggle = true;
+  //             });
+  //           }
+
+  //           transaction.update(documentRef, {'bookmarks': bookmarks});
+  //         } else {
+  //           transaction.set(documentRef, {
+  //             'bookmarks': [
+  //               {'name': widget.name, 'location': widget.location}
+  //             ]
+  //           });
+  //         }
+  //       });
+  //     }
+  //   } else {
+  //     showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //           title: Text('Logout'),
+  //           content: Text('Kindly sign into your accont'),
+  //           actions: [
+  //             TextButton(
+  //               child: Text('Cancel'),
+  //               onPressed: () {
+  //                 Navigator.of(context).pop();
+  //               },
+  //             ),
+  //             TextButton(
+  //               child: Text('Log in'),
+  //               onPressed: () {
+  //                 Navigator.of(context).pop();
+  //                 Navigator.pushNamed(context, "/login");
+
+  //                 // signOutUser();
+  //                 // Call the signOutUser function
+  //               },
+  //             ),
+  //           ],
+  //         );
+  //       },
+  //     );
+  //   }
+  // }
 
   void initState() {
     super.initState();
@@ -571,7 +593,7 @@ class _ForYouWidgetState extends State<ForYouWidget> {
                       right: 1.5,
                       child: GestureDetector(
                         onTap: () {
-                          bookmark();
+                          bookmark(widget.name, widget.location);
                         },
                         child: Container(
                           height: 27,

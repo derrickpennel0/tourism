@@ -48,36 +48,7 @@ class _FirstTimersPageState extends State<FirstTimersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Container(
-            padding: EdgeInsets.all(12),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(7),
-                  color: Colors.white.withOpacity(0.8),
-                ),
-                child: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.redAccent,
-                  size: 20,
-                ),
-              ),
-            )),
-        title: Text(
-          "Details",
-          style: GoogleFonts.quicksand(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              color: const Color.fromARGB(149, 255, 255, 255)),
-        ),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
+      extendBodyBehindAppBar: true,
       body: SafeArea(
           child: Stack(children: [
         PageView.builder(
@@ -122,7 +93,7 @@ class Overlay extends StatefulWidget {
 class _OverlayState extends State<Overlay> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
-
+  var pageChange = false;
   @override
   void initState() {
     super.initState();
@@ -157,7 +128,9 @@ class _OverlayState extends State<Overlay> with SingleTickerProviderStateMixin {
               Text(
                 '0$pageNumber',
                 style: GoogleFonts.quicksand(
-                    fontSize: 70, fontWeight: FontWeight.bold),
+                    fontSize: 70,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade100),
               ),
               const SizedBox(
                 height: 10,
@@ -165,7 +138,9 @@ class _OverlayState extends State<Overlay> with SingleTickerProviderStateMixin {
               Text(
                 _summary[pageNumber - 1]["title"]!,
                 style: GoogleFonts.quicksand(
-                    fontSize: 30, fontWeight: FontWeight.w600),
+                    fontSize: 30,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade100),
               ),
               Text(
                 _summary[pageNumber - 1]["subtitle"]!,
@@ -232,8 +207,11 @@ class _OverlayState extends State<Overlay> with SingleTickerProviderStateMixin {
                           builder: (context, child) {
                             return Transform.scale(
                               scale: _animation.value,
-                              child:
-                                  Icon(Icons.keyboard_arrow_up, size: iconSize),
+                              child: Icon(
+                                Icons.keyboard_arrow_up,
+                                size: iconSize,
+                                color: Colors.grey.shade100,
+                              ),
                             );
                           },
                         ),

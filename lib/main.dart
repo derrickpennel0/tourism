@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:first/components/autcomplete.dart';
 import 'package:first/components/map.dart';
+import 'package:first/screens/profile.dart';
 import 'package:first/screens/details.dart';
 import 'package:first/screens/home.dart';
 import 'package:first/screens/interest-page.dart';
@@ -30,7 +31,7 @@ void main() async {
     MaterialApp(
       initialRoute: '/',
       routes: {
-        '/': (context) => const FirstTimerPage(),
+        '/': (context) => FirstTimerPage(),
         '/login': (context) {
           final user = FirebaseAuth.instance.currentUser;
           if (user != null) {

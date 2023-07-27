@@ -237,15 +237,18 @@ class _HomeState extends State<Home> {
           // duration: Duration(milliseconds: 100), // tab animation duration
           gap: 8, // the tab button gap between icon and text
           color: Colors.grey[800], // unselected icon color
-          activeColor: Colors.grey.shade800,
-          tabBackgroundGradient: LinearGradient(
-              colors: [
-                Colors.grey.shade500,
-                Colors.grey.shade300
-                // Colors.transparent,
-              ],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight), // selected icon and text color
+          activeColor: Colors.redAccent,
+          tabBackgroundGradient: RadialGradient(
+            colors: [
+              Colors.grey.shade100,
+              Colors.grey.shade600,
+
+              // Colors.transparent,
+            ],
+            radius: 3,
+            // begin: Alignment.centerLeft,
+            // end: Alignment.centerRight,
+          ), // selected icon and text color
           iconSize: 30, // tab button icon size
           // tabBackgroundColor: Colors.grey.shade300,
           textStyle: GoogleFonts.quicksand(
@@ -264,7 +267,7 @@ class _HomeState extends State<Home> {
           // navigation bar padding
           tabs: [
             GButton(
-              icon: Icons.home_outlined,
+              icon: Icons.home,
               text: 'Home',
             ),
             GButton(
@@ -857,7 +860,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         Text(
                           FirebaseAuth.instance.currentUser != null
-                              ? '@${_username}'
+                              ? '${_username != null ? '@$_username' : ""}'
                               : '',
                           style: GoogleFonts.quicksand(
                               fontSize: 16,

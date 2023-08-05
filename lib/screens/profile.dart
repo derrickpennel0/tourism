@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import '../styles/app_style.dart';
+import 'dart:io';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -13,21 +15,31 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool _edit = false;
-  Future _selectImage() async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+  // Future _selectImage() async {
+  //   final picker = ImagePicker();
+  //   final pickedImage = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedImage != null) {
-      // setState(() {
-      //   LoggedInUser. = pickedImage.path;
-      // });
-    }
+  //   if (pickedImage != null) {
+  //     // setState(() {
+  //     //   LoggedInUser. = pickedImage.path;
+  //     // });
+  //   }
+  // }
+
+  File? _imageFile;
+  final picker = ImagePicker();
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await picker.pickImage(source: source);
+
+    setState(() {
+      // if (pickedFile != null) {
+      _imageFile = File(pickedFile!.path);
+      // }
+    });
   }
 
-  // Function to handle profile information editing
   void _editProfile() {
-    // Show a dialog or navigate to an editing page where the user can modify their information
-    // For simplicity, let's just show a Snackbar message
     setState(() {
       _edit = !_edit;
     });
@@ -80,6 +92,64 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
   }
 
+  void _showOptionsDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Choose an option"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _pickImage(ImageSource.gallery);
+              },
+              child: Text("Choose from Gallery"),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _pickImage(ImageSource.camera);
+              },
+              child: Text("Take a Photo"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _uploadImage() async {
+    if (_imageFile == null) {
+      debugPrint("ghana");
+      return;
+    }
+
+    // Upload the image to Firebase Storage
+
+    final reference = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('profile_pics/${DateTime.now().toString()}.jpg');
+
+    await reference.putFile(_imageFile!);
+
+    // Get the download URL of the uploaded image
+    final imageUrl = await reference.getDownloadURL();
+
+    // Update the user's profilePic field in Firestore
+    // Replace 'YOUR_USER_ID' with the actual user ID
+    // You should have the user ID from your authentication method (Firebase Auth, etc.).
+    // Firestore example code:
+    final userId = await FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'profilePic': imageUrl,
+    });
+
+    // Uncomment the above Firestore code once you set up Firestore in your project.
+
+    print('Image uploaded successfully. URL: $imageUrl');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,16 +188,22 @@ class _ProfilePageState extends State<ProfilePage> {
                             Stack(
                               children: [
                                 // Profile picture
-                                CircleAvatar(
-                                  radius: 50,
-                                  // backgroundImage: AssetImage(),
-                                ),
+                                _imageFile != null
+                                    ? CircleAvatar(
+                                        radius: 50,
+                                        backgroundImage: FileImage(_imageFile!),
+                                      )
+                                    : CircleAvatar(
+                                        radius: 50,
+                                        backgroundImage: NetworkImage(
+                                            "${snapshot.data?.profilePic}"),
+                                      ),
                                 // Camera icon overlay
                                 Positioned(
                                   bottom: 0,
                                   right: 0,
                                   child: GestureDetector(
-                                    onTap: _selectImage,
+                                    onTap: _showOptionsDialog,
                                     child: CircleAvatar(
                                       radius: 15,
                                       backgroundColor:
@@ -359,6 +435,7 @@ class LoggedInUser {
   String? location;
   String? phone;
   String? email;
+  String? profilePic;
 
   static Future<LoggedInUser?> info() async {
     User? user = await FirebaseAuth.instance.currentUser;
@@ -374,12 +451,14 @@ class LoggedInUser {
       String? location = snapshot.data()?['location'] as String?;
       String? phone = snapshot.data()?['phone'] as String?;
       String? email = snapshot.data()?['email'] as String?;
+      String? profilePic = snapshot.data()?['profilePic'] as String?;
 
       LoggedInUser loggedInUser = LoggedInUser();
       loggedInUser._username = userName;
       loggedInUser.location = location;
       loggedInUser.phone = phone;
       loggedInUser.email = email;
+      loggedInUser.profilePic = profilePic;
 
       // print(loggedInUser.email);
       return loggedInUser;

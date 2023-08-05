@@ -820,11 +820,11 @@ class _DashboardState extends State<Dashboard> {
       FirebaseAuth auth = FirebaseAuth.instance;
       await auth.signOut();
       // Redirect the user to the login screen or any other screen as needed
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LoginPage(),
-          ));
+      // Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => LoginPage(),
+      //     ));
     } catch (e) {
       print(e);
     }
@@ -917,7 +917,7 @@ class _DashboardState extends State<Dashboard> {
                                         onPressed: () {
                                           signOutUser();
                                           // Call the signOutUser function
-                                          // Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
                                         },
                                       ),
                                     ],

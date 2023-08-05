@@ -18,7 +18,7 @@ class _GMapsState extends State<GMaps> {
   late GoogleMapController googleMapController;
 
   Future<void> _getCurrentLocation() async {
-    print("position");
+    // print("position");
     // final position = await Geolocator.getCurrentPosition();
     // Update the camera position of the Google Map
     googleMapController.animateCamera(
@@ -26,7 +26,7 @@ class _GMapsState extends State<GMaps> {
         CameraPosition(
           target:
               LatLng(widget.coordinates['lat']!, widget.coordinates['lng']!),
-          zoom: 11,
+          zoom: 10,
         ),
       ),
     );
@@ -35,6 +35,7 @@ class _GMapsState extends State<GMaps> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
           leading: Container(
               padding: EdgeInsets.all(12),
@@ -107,7 +108,7 @@ class _GMapsState extends State<GMaps> {
           initialCameraPosition: CameraPosition(
               target: LatLng(
                   widget.coordinates['lat']!, widget.coordinates['lng']!),
-              zoom: 14),
+              zoom: 40),
         ),
       ),
       floatingActionButton: FloatingActionButton(

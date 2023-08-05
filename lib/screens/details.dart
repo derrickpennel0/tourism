@@ -7,6 +7,7 @@ import 'package:first/components/map.dart';
 import 'package:first/styles/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -133,7 +134,7 @@ class _DetailsState extends State<Details> {
     }
   }
 
-  List tabs = ['Overview', 'Reviews', 'Close Restaurants and Hotels'];
+  List tabs = ['Overview', 'Reviews', 'Nearby Restaurants and Hotels'];
   List Images = [
     'forest',
     'lake',
@@ -142,7 +143,7 @@ class _DetailsState extends State<Details> {
     'zoo',
     'sanctuary'
   ];
-
+  late GoogleMapController googleMapController;
   bool toggle = false;
   bool isInitial = true;
   @override
@@ -705,20 +706,40 @@ class _DetailsState extends State<Details> {
                                                 fontWeight: FontWeight.w500,
                                                 color: Colors.grey.shade600),
                                           )
-                                        : SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.30,
-                                            child: ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount: 3,
-                                              itemBuilder: (context, index) =>
-                                                  const ForYouWidget(
-                                                rating: "3.4",
-                                                name: "ghana",
-                                                location: "Volta",
-                                                image: "http:ghahahgh",
+                                        : Expanded(
+                                            child: Container(
+                                              height: 220,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: GoogleMap(
+                                                  zoomControlsEnabled: false,
+                                                  markers: {
+                                                    Marker(
+                                                      markerId:
+                                                          MarkerId("demo"),
+                                                      infoWindow: InfoWindow(
+                                                          title:
+                                                              "${widget.name}"),
+                                                      position: LatLng(
+                                                          latitude, longitude),
+                                                      // draggable: true,
+                                                    )
+                                                  },
+                                                  mapType: MapType.normal,
+                                                  onMapCreated:
+                                                      (GoogleMapController
+                                                          controller) {
+                                                    googleMapController =
+                                                        controller;
+                                                  },
+                                                  initialCameraPosition:
+                                                      CameraPosition(
+                                                          target: LatLng(
+                                                              latitude,
+                                                              longitude),
+                                                          zoom: 13),
+                                                ),
                                               ),
                                             ),
                                           ),

@@ -916,6 +916,7 @@ class _DashboardState extends State<Dashboard> {
                                         child: Text('Logout'),
                                         onPressed: () {
                                           signOutUser();
+                                          setState(() {});
                                           // Call the signOutUser function
                                           Navigator.of(context).pop();
                                         },

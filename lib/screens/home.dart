@@ -390,6 +390,39 @@ class _ForYouWidgetState extends State<ForYouWidget> {
       User? user = FirebaseAuth.instance.currentUser;
       if (user == null) {
         print('No user is logged in.');
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Kindly log into your account",
+                style: GoogleFonts.quicksand(
+                    color: Colors.grey[800], fontWeight: FontWeight.w700)),
+            actions: [
+              TextButton(
+                child: Text("Cancel",
+                    style: GoogleFonts.quicksand(
+                        fontSize: 16,
+                        color: Colors.redAccent,
+                        fontWeight: FontWeight.w600)),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: Text(
+                  "Ok",
+                  style: GoogleFonts.quicksand(
+                      fontSize: 16,
+                      color: Colors.redAccent,
+                      fontWeight: FontWeight.w600),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, "/login");
+                },
+              )
+            ],
+          ),
+        );
         return;
       }
 

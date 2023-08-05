@@ -131,78 +131,176 @@ class _ForYouWidgetState extends State<ForYouWidget> {
   // }
 
   void checkBookmarkStatus() async {
-    final userId = FirebaseAuth.instance.currentUser?.email;
-    final site = widget.name;
-    final CollectionReference collectionRef =
-        FirebaseFirestore.instance.collection('users');
+    if (FirebaseAuth.instance.currentUser != null) {
+      final userId = FirebaseAuth.instance.currentUser?.email;
+      final site = {'name': widget.name, 'location': widget.location};
+      final CollectionReference collectionRef =
+          FirebaseFirestore.instance.collection('users');
 
-    final QuerySnapshot querySnapshot =
-        await collectionRef.where('email', isEqualTo: userId).get();
+      final QuerySnapshot querySnapshot =
+          await collectionRef.where('email', isEqualTo: userId).get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      final DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
-      final data = documentSnapshot.data() as Map<String, dynamic>;
+      if (querySnapshot.docs.isNotEmpty) {
+        final DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
+        final data = documentSnapshot.data() as Map<String, dynamic>;
 
-      if (data.containsKey('bookmarks')) {
-        List<dynamic> sites = data['bookmarks'];
+        if (data.containsKey('bookmarks')) {
+          List<dynamic> sites = data['bookmarks'];
+          bool isBookmarkPresent(String name, String location) {
+            return sites.any((bookmark) =>
+                bookmark['name'] == name && bookmark['location'] == location);
+          }
 
-        if (sites.contains(site)) {
-          setState(() {
-            toggle = true;
-          });
-        } else {
-          setState(() {
-            toggle = false;
-          });
+          if (isBookmarkPresent(widget.name, widget.location)) {
+            setState(() {
+              toggle = true;
+            });
+          } else {
+            setState(() {
+              toggle = false;
+            });
+          }
         }
       }
     }
   }
 
-  void bookmark() async {
-    final userId = FirebaseAuth.instance.currentUser?.email;
-    final site = widget.name;
-    final CollectionReference collectionRef =
-        FirebaseFirestore.instance.collection('users');
+  Future<void> bookmark(String name, String location) async {
+    try {
+      // Get the current logged-in user
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        print('No user is logged in.');
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Kindly log into your account",
+                style: GoogleFonts.quicksand(
+                    color: Colors.grey[800], fontWeight: FontWeight.w700)),
+            actions: [
+              TextButton(
+                child: Text("Cancel",
+                    style: GoogleFonts.quicksand(
+                        fontSize: 16,
+                        color: Colors.redAccent,
+                        fontWeight: FontWeight.w600)),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: Text(
+                  "Ok",
+                  style: GoogleFonts.quicksand(
+                      fontSize: 16,
+                      color: Colors.redAccent,
+                      fontWeight: FontWeight.w600),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, "/login");
+                },
+              )
+            ],
+          ),
+        );
+        return;
+      }
 
-    final QuerySnapshot querySnapshot =
-        await collectionRef.where('email', isEqualTo: userId).get();
+      // Get a reference to the user's document in Firestore
+      DocumentReference<Map<String, dynamic>> userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(user.uid);
 
-    if (querySnapshot.docs.isNotEmpty) {
-      final DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
-      final DocumentReference documentRef = FirebaseFirestore.instance
-          .collection('users')
-          .doc(documentSnapshot.reference.id);
+      // Get the user's document snapshot
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await userDocRef.get();
 
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
-        final DocumentSnapshot snapshot = await transaction.get(documentRef);
-        final data = snapshot.data()
-            as Map<String, dynamic>; // Explicitly cast to Map<String, dynamic>
+      // Get the current bookmarks array
+      List<dynamic>? bookmarksArray = userSnapshot.data()?['bookmarks'];
 
-        if (snapshot.exists) {
-          final List<dynamic> bookmarks = data['bookmarks'] ?? [];
-
-          if (bookmarks.contains(site)) {
-            bookmarks.remove(site);
-            setState(() {
-              toggle = false;
-            });
-          } else {
-            bookmarks.add(site);
-            setState(() {
-              toggle = true;
-            });
+      if (bookmarksArray == null) {
+        // If the bookmarks array doesn't exist, create a new one with the first bookmark
+        bookmarksArray = [
+          {'name': name, 'location': location},
+        ];
+      } else {
+        // Check if the bookmark already exists in the array
+        bool bookmarkExists = false;
+        for (var bookmark in bookmarksArray) {
+          if (bookmark['name'] == name && bookmark['location'] == location) {
+            bookmarkExists = true;
+            break;
           }
-
-          transaction.update(documentRef, {'bookmarks': bookmarks});
-        } else {
-          transaction.set(documentRef, {
-            'bookmarks': [site]
-          });
         }
-      });
+
+        // If the bookmark exists, remove it; otherwise, add it to the array
+        if (bookmarkExists) {
+          setState(() {
+            toggle = false;
+          });
+          bookmarksArray.removeWhere((bookmark) =>
+              bookmark['name'] == name && bookmark['location'] == location);
+        } else {
+          setState(() {
+            toggle = true;
+          });
+          bookmarksArray.add({'name': name, 'location': location});
+        }
+      }
+
+      // Update the bookmarks array in Firestore
+      await userDocRef.update({'bookmarks': bookmarksArray});
+
+      print('Bookmarking/unbookmarking successful.');
+    } catch (e) {
+      print('Error bookmarking/unbookmarking: $e');
     }
   }
+
+  // void bookmark() async {
+  //   final userId = FirebaseAuth.instance.currentUser?.email;
+  //   final site = widget.name;
+  //   final CollectionReference collectionRef =
+  //       FirebaseFirestore.instance.collection('users');
+
+  //   final QuerySnapshot querySnapshot =
+  //       await collectionRef.where('email', isEqualTo: userId).get();
+
+  //   if (querySnapshot.docs.isNotEmpty) {
+  //     final DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
+  //     final DocumentReference documentRef = FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(documentSnapshot.reference.id);
+
+  //     await FirebaseFirestore.instance.runTransaction((transaction) async {
+  //       final DocumentSnapshot snapshot = await transaction.get(documentRef);
+  //       final data = snapshot.data()
+  //           as Map<String, dynamic>; // Explicitly cast to Map<String, dynamic>
+
+  //       if (snapshot.exists) {
+  //         final List<dynamic> bookmarks = data['bookmarks'] ?? [];
+
+  //         if (bookmarks.contains(site)) {
+  //           bookmarks.remove(site);
+  //           setState(() {
+  //             toggle = false;
+  //           });
+  //         } else {
+  //           bookmarks.add(site);
+  //           setState(() {
+  //             toggle = true;
+  //           });
+  //         }
+
+  //         transaction.update(documentRef, {'bookmarks': bookmarks});
+  //       } else {
+  //         transaction.set(documentRef, {
+  //           'bookmarks': [site]
+  //         });
+  //       }
+  //     });
+  //   }
+  // }
 
   void initState() {
     super.initState();
@@ -272,10 +370,10 @@ class _ForYouWidgetState extends State<ForYouWidget> {
                       right: 1.5,
                       child: GestureDetector(
                         onTap: () {
-                          bookmark();
-                          setState(() {
-                            toggle = !toggle;
-                          });
+                          bookmark(widget.name, widget.location);
+                          // setState(() {
+                          //   toggle = !toggle;
+                          // });
                         },
                         child: Container(
                           height: 35,
@@ -386,10 +484,11 @@ class _ForYouWidgetState extends State<ForYouWidget> {
                                         Text(
                                           widget.rating,
                                           style: GoogleFonts.quicksand(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w700,
-                                            // color: const Color.fromARGB(149, 255, 255, 255),
-                                          ),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.grey[100]
+                                              // color: const Color.fromARGB(149, 255, 255, 255),
+                                              ),
                                         ),
                                       ],
                                     ),

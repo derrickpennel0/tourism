@@ -194,13 +194,13 @@ class _DetailsState extends State<Details> {
 
   void initState() {
     super.initState();
-    // checkBookmarkStatus();
+    checkBookmarkStatus();
   }
 
-  void checkBookmarkStatus(location) async {
+  void checkBookmarkStatus() async {
     if (FirebaseAuth.instance.currentUser != null) {
       final userId = FirebaseAuth.instance.currentUser?.email;
-      final site = {'name': widget.name, 'location': location};
+      final site = {'name': widget.name};
       final CollectionReference collectionRef =
           FirebaseFirestore.instance.collection('users');
 
@@ -213,12 +213,11 @@ class _DetailsState extends State<Details> {
 
         if (data.containsKey('bookmarks')) {
           List<dynamic> sites = data['bookmarks'];
-          bool isBookmarkPresent(String name, String location) {
-            return sites.any((bookmark) =>
-                bookmark['name'] == name && bookmark['location'] == location);
+          bool isBookmarkPresent(String name) {
+            return sites.any((bookmark) => bookmark['name'] == name);
           }
 
-          if (isBookmarkPresent(widget.name, location)) {
+          if (isBookmarkPresent(widget.name)) {
             setState(() {
               toggle = true;
             });
@@ -271,7 +270,7 @@ class _DetailsState extends State<Details> {
           final latitude = double.parse(data['latitude']);
           final description = data['description'];
           final images = data['images'];
-          checkBookmarkStatus(locationString);
+          // checkBookmarkStatus(locationString);
           return SafeArea(
             child: Scaffold(
               appBar: AppBar(

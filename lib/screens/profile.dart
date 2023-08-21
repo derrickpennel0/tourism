@@ -300,7 +300,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStatePropertyAll(
-                                                Colors.blue)),
+                                                Colors.redAccent)),
                                   )
                           ]),
                       Divider(

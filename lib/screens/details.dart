@@ -275,33 +275,34 @@ class _DetailsState extends State<Details> {
             child: Scaffold(
               appBar: AppBar(
                   leading: Container(
-                      padding: EdgeInsets.all(12),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(7),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.white,
-                                    offset: Offset(-2, -2),
-                                    blurRadius: 5,
-                                    spreadRadius: 12),
-                                BoxShadow(
-                                    color: Color.fromARGB(255, 191, 191, 191),
-                                    offset: Offset(2, 2),
-                                    blurRadius: 5)
-                              ]),
-                          child: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.redAccent,
-                            size: 20,
-                          ),
+                    padding: EdgeInsets.all(12),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.white,
+                                  offset: Offset(-2, -2),
+                                  blurRadius: 5,
+                                  spreadRadius: 12),
+                              BoxShadow(
+                                  color: Color.fromARGB(255, 191, 191, 191),
+                                  offset: Offset(2, 2),
+                                  blurRadius: 5)
+                            ]),
+                        child: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.redAccent,
+                          size: 20,
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                   title: Text(
                     "Details",
                     style: GoogleFonts.quicksand(

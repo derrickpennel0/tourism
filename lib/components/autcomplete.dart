@@ -18,6 +18,8 @@ class Suggestion {
 }
 
 class MySearchScreen extends StatefulWidget {
+  // final List filters;
+  // MySearchScreen({required this.filters});
   @override
   _MySearchScreenState createState() => _MySearchScreenState();
 }
@@ -25,20 +27,64 @@ class MySearchScreen extends StatefulWidget {
 class _MySearchScreenState extends State<MySearchScreen> {
   final TextEditingController _searchController = TextEditingController();
 
-  Future<List<Map<String, dynamic>>> searchDocuments(String query) async {
+  // Future<List<Map<String, dynamic>>> searchDocuments(String query) async {
+  //   final collectionRef = FirebaseFirestore.instance.collection('sites');
+
+  //   try {
+  //     final snapshot = await collectionRef.get();
+  //     final documents = snapshot.docs.map((doc) => doc.data());
+
+  //     // Check if any field name matches the query
+  //     final matchingDocuments = documents.where((doc) =>
+  //         doc['name']?.toLowerCase().contains(query.toLowerCase()) ?? false);
+
+  //     return matchingDocuments.toList();
+  //   } catch (error) {
+  //     throw Exception('Error searching documents: $error');
+  //   }
+  // }
+
+  Future<List<Map<String, dynamic>>> searchAndFilterDocuments(
+      String query, List<bool> checkedItems, List<String> items) async {
     final collectionRef = FirebaseFirestore.instance.collection('sites');
 
     try {
       final snapshot = await collectionRef.get();
       final documents = snapshot.docs.map((doc) => doc.data());
 
-      // Check if any field name matches the query
+      // Search documents based on query
       final matchingDocuments = documents.where((doc) =>
           doc['name']?.toLowerCase().contains(query.toLowerCase()) ?? false);
 
-      return matchingDocuments.toList();
+      // Apply category filters if checkedItems has true values
+      List<Map<String, dynamic>> filteredDocuments = matchingDocuments.toList();
+      List<String> selectedCategories = [];
+      List<Map<String, dynamic>> arr = [];
+      if (checkedItems.contains(true)) {
+        // Collect selected categories
+        checkedItems.asMap().forEach((index, isSelected) {
+          if (isSelected) {
+            selectedCategories.add(items[index]);
+          }
+        });
+        print(selectedCategories);
+        // Filter documents by selected categories
+
+        filteredDocuments = filteredDocuments
+            .where((doc) =>
+                (doc['catergory'] != "" || doc['catergory'] != "") &&
+                (doc['catergory'] == selectedCategories[0] ||
+                    doc['catergory'] == selectedCategories[0]))
+            .toList();
+        filteredDocuments.forEach((element) {
+          arr.add(element);
+        });
+      }
+      print(arr);
+
+      return arr;
     } catch (error) {
-      throw Exception('Error searching documents: $error');
+      throw Exception('Error searching and filtering documents: $error');
     }
   }
 
@@ -75,6 +121,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
     'Zoo',
     'Museum'
   ];
+
   List<bool> checkedItems = [
     false,
     false,
@@ -137,6 +184,18 @@ class _MySearchScreenState extends State<MySearchScreen> {
                                           trailing: Checkbox(
                                             value: checkedItems[index],
                                             onChanged: (bool? value) {
+                                              checkedItems = [
+                                                false,
+                                                false,
+                                                false,
+                                                false,
+                                                false,
+                                                false,
+                                                false,
+                                                false,
+                                                false,
+                                                false
+                                              ];
                                               setState(() {
                                                 checkedItems[index] = value!;
                                               });
@@ -192,7 +251,8 @@ class _MySearchScreenState extends State<MySearchScreen> {
                   return [];
                 }
                 List<Map<String, dynamic>> matchingDocuments =
-                    await searchDocuments(pattern);
+                    await searchAndFilterDocuments(
+                        pattern, checkedItems, items);
                 List<Suggestion> suggestions = matchingDocuments.map((doc) {
                   return Suggestion(
                     name: doc['name'].toString(),
@@ -256,18 +316,20 @@ class _MySearchScreenState extends State<MySearchScreen> {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: Color.fromARGB(
-                                189, 107, 107, 107), // Dark background color
+                                188, 255, 254, 254), // Dark background color
                             borderRadius:
-                                BorderRadius.circular(7), // Rounded edges
+                                BorderRadius.circular(25), // Rounded edges
                             border: Border.all(
-                                color: Colors.white60), // Red accent border
+                                color:
+                                    Colors.grey.shade700), // Red accent border
                           ),
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 9, vertical: 1),
+                              horizontal: 9, vertical: 0.2),
                           margin: const EdgeInsets.symmetric(horizontal: 4),
                           child: Text(
                             items[index],
-                            style: TextStyle(color: Colors.white), // Text color
+                            style: TextStyle(
+                                color: Colors.grey.shade700), // Text color
                           ),
                         );
                       }

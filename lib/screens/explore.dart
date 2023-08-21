@@ -8,6 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'details.dart';
 
 class Explore extends StatelessWidget {
+  Explore({super.key, required this.siteName});
+  final String siteName;
   final List<String> imageUrls = [
     'assets/images/desert.jpg',
     'assets/images/desert.jpg',
@@ -23,11 +25,19 @@ class Explore extends StatelessWidget {
     'assets/images/desert.jpg',
     // Add more image URLs as needed
   ];
-  Future forYou() async {
-    return FirebaseFirestore.instance.collection('sites').limit(4).get();
-  }
+  // Future forYou() async {
+  //   return FirebaseFirestore.instance.collection('sites').limit(4).get();
+  // }
 
-  Explore({super.key});
+  Future searchSitesByLocation(String searchString) async {
+    CollectionReference sitesCollection =
+        FirebaseFirestore.instance.collection('sites');
+
+    QuerySnapshot querySnapshot =
+        await sitesCollection.where('region', isEqualTo: searchString).get();
+
+    return querySnapshot.docs;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,10 +85,11 @@ class Explore extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       body: FutureBuilder(
-        future: forYou(),
+        future: searchSitesByLocation(siteName),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final List documents = snapshot.data.docs;
+            print({siteName, snapshot.data});
+            final List documents = snapshot.data;
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView.builder(
@@ -133,7 +144,7 @@ class _ForYouWidgetState extends State<ForYouWidget> {
   void checkBookmarkStatus() async {
     if (FirebaseAuth.instance.currentUser != null) {
       final userId = FirebaseAuth.instance.currentUser?.email;
-      final site = {'name': widget.name, 'location': widget.location};
+      // final site = {'name': widget.name, 'location': widget.location};
       final CollectionReference collectionRef =
           FirebaseFirestore.instance.collection('users');
 

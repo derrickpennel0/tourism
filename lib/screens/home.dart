@@ -12,6 +12,7 @@ import 'package:first/screens/details.dart';
 import 'package:first/screens/explore.dart';
 import 'package:first/screens/first_timers_page.dart';
 import 'package:first/screens/profile.dart';
+import 'package:first/screens/regions.dart';
 import 'package:first/styles/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -1011,7 +1012,7 @@ class _DashboardState extends State<Dashboard> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Explore(),
+                                  builder: (context) => Regions(),
                                 ));
                           },
                           icon: Icon(
@@ -1063,81 +1064,86 @@ class _DashboardState extends State<Dashboard> {
               const SizedBox(
                 height: 5,
               ),
-              Stack(
-                children: [
-                  Carousel(),
-                  Container(
-                    height: 250,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            Colors.black54.withOpacity(0.7),
-                            Colors.transparent
-                          ],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                            alignment: const Alignment(-1, 0),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Traveler's Choice Best \n of the Best Hotels",
-                                  style: GoogleFonts.outfit(
-                                      color: Colors.white,
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.w800),
-                                ),
-                                Text(
-                                  "Traveler's Choice Best of the Best Hotels",
-                                  style: GoogleFonts.outfit(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const FirstTimersPage(),
-                                        ));
-                                  },
-                                  style: ButtonStyle(
-                                      shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                      ),
-                                      minimumSize: MaterialStatePropertyAll(
-                                          Size(100, 45)),
-                                      backgroundColor: MaterialStatePropertyAll(
-                                          Colors.white)),
-                                  child: const Text(
-                                    "See List",
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                )
+              Expanded(
+                child: Stack(
+                  children: [
+                    Carousel(),
+                    Expanded(
+                      child: Container(
+                        height: 250,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                                Colors.black54.withOpacity(0.7),
+                                Colors.transparent
                               ],
-                            ))
-                      ],
-                    ),
-                  )
-                ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                                alignment: const Alignment(-1, 0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Traveler's Choice Best \n of the Best Hotels",
+                                      style: GoogleFonts.outfit(
+                                          color: Colors.white,
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                    Text(
+                                      "Traveler's Choice Best of the Best Hotels",
+                                      style: GoogleFonts.outfit(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const FirstTimersPage(),
+                                            ));
+                                      },
+                                      style: ButtonStyle(
+                                          shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                            ),
+                                          ),
+                                          minimumSize: MaterialStatePropertyAll(
+                                              Size(100, 45)),
+                                          backgroundColor:
+                                              MaterialStatePropertyAll(
+                                                  Colors.white)),
+                                      child: const Text(
+                                        "See List",
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    )
+                                  ],
+                                ))
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               )
             ]),
       ),

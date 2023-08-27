@@ -6,7 +6,7 @@ class Regions extends StatelessWidget {
   const Regions({super.key});
   static const List<String> ghanaRegions = [
     "Ashanti Region",
-    "Brong-Ahafo Region",
+    "Brong Ahafo Region",
     "Central Region",
     "Eastern Region",
     "Greater Accra Region",

@@ -135,6 +135,8 @@ class _MySearchScreenState extends State<MySearchScreen> {
     false
   ];
 
+  int selectedValue = -1;
+
   @override
   Widget build(BuildContext context) {
     // final themeChanger = Provider.of<ThemeChanger>(context);
@@ -181,9 +183,10 @@ class _MySearchScreenState extends State<MySearchScreen> {
                                           (BuildContext context, int index) {
                                         return ListTile(
                                           title: Text(items[index]),
-                                          trailing: Checkbox(
-                                            value: checkedItems[index],
-                                            onChanged: (bool? value) {
+                                          trailing: Radio(
+                                            groupValue: selectedValue,
+                                            value: index,
+                                            onChanged: (value) {
                                               checkedItems = [
                                                 false,
                                                 false,
@@ -196,8 +199,9 @@ class _MySearchScreenState extends State<MySearchScreen> {
                                                 false,
                                                 false
                                               ];
+                                              selectedValue = value!;
                                               setState(() {
-                                                checkedItems[index] = value!;
+                                                checkedItems[index] = true;
                                               });
 
                                               // Navigator.of(context).pop();
@@ -210,6 +214,28 @@ class _MySearchScreenState extends State<MySearchScreen> {
                                 },
                               ),
                               actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    selectedValue = -1;
+                                    setState(() {
+                                      checkedItems = [
+                                        false,
+                                        false,
+                                        false,
+                                        false,
+                                        false,
+                                        false,
+                                        false,
+                                        false,
+                                        false,
+                                        false
+                                      ];
+                                      // Update the UI with selected items
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancel'),
+                                ),
                                 TextButton(
                                   onPressed: () {
                                     setState(() {
